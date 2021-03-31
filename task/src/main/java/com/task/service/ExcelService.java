@@ -3,8 +3,6 @@ package com.task.service;
 import com.task.model.Excel;
 import com.task.model.Task;
 import com.task.utils.ExcelUtils;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +31,7 @@ public class ExcelService {
 
     public static void main(String[] args) {
         Excel excel = new Excel();
-        excel.setPath("/Users/gui.petena/desktop/doctask.xls");
+        excel.setPath("/Users/gui.petena/downloads/planning.xlsm");
         Task task = new Task("sub-dev","historia para teste","testando pra ver como é");
         Task task1 = new Task("sub-teste","historia para dev","testando pra saber como é");
         List<Task> list = new ArrayList<>();

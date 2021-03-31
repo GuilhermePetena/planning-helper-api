@@ -20,7 +20,6 @@ public class TaskResource {
 	public ResponseEntity<Excel> setaPath(@RequestBody Excel excel){
 		
 		path = excel.getPath();
-		
 		return ResponseEntity.status(HttpStatus.OK).body(excel);
 	}
 	

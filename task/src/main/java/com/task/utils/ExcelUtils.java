@@ -1,33 +1,30 @@
 package com.task.utils;
 
-import org.apache.poi.ss.usermodel.*;
-
+import org.apache.poi.xssf.usermodel.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ExcelUtils {
 
-    private static Workbook workbook;
-    private static Sheet planilha;
+    private static XSSFWorkbook xssfWorkbook;
+    private static XSSFSheet xssfSheet;
     private static FileInputStream fileInputStream;
     private static FileOutputStream fileOutputStream;
-    private static Row linha;
-    private static Cell celula;
+    private static XSSFRow linha;
+    private static XSSFCell celula;
 
     public static void inicializarExcel(String path, String nomePlanilha){
         try {
             fileInputStream = new FileInputStream(path);
-            workbook = WorkbookFactory.create(fileInputStream);
-
-            planilha = workbook.getSheet(nomePlanilha);
+            xssfWorkbook =  new XSSFWorkbook(fileInputStream);
+            xssfSheet = xssfWorkbook.getSheet(nomePlanilha);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
     public static void criarLinha(int index){
-        linha = planilha.createRow(index);
+        linha = xssfSheet.createRow(index);
     }
     public static void criarCelula(int index){
         celula = linha.createCell(index);
@@ -37,14 +34,12 @@ public class ExcelUtils {
         celula.setCellValue(valor);
     }
 
-    public static int obterNumeroDeLinhas(){
-        return linha.getRowNum();
-    }
 
     public static void finalizarExcel(String path){
         try {
             fileOutputStream = new FileOutputStream(path);
-            workbook.write(fileOutputStream);
+            xssfWorkbook.write(fileOutputStream);
+            xssfWorkbook.close();
             fileOutputStream.flush();
             fileOutputStream.close();
         } catch (Exception e){
