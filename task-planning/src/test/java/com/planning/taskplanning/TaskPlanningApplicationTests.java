@@ -1,10 +1,10 @@
-package com.task;
+package com.planning.taskplanning;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TaskApplicationTests {
+class TaskPlanningApplicationTests {
 
 	@Test
 	void contextLoads() {

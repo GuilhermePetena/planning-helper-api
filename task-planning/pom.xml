@@ -8,11 +8,11 @@
 		<version>2.4.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.task</groupId>
-	<artifactId>task</artifactId>
+	<groupId>com.planning</groupId>
+	<artifactId>task-planning</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>task</name>
-	<description>Projeto Task</description>
+	<name>task-planning</name>
+	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -36,7 +36,17 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>              <!--fot jap compilation need provide scope runtime or provided because it available in tomcat -->
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>runtime</scope>     <!-- in my case provided not working so write runtime-->
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>           <!-- for jsp jstl tags-->
+			<artifactId>jstl</artifactId>
+		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -45,4 +55,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>
