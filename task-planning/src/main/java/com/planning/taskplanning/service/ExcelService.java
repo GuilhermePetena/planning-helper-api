@@ -1,9 +1,8 @@
-package com.planning.taskplanning.service;
+package com.planning.projectissue.service;
 
-
-import com.planning.taskplanning.model.Excel;
-import com.planning.taskplanning.model.Task;
-import com.planning.taskplanning.utils.ExcelUtils;
+import com.planning.projectissue.model.Excel;
+import com.planning.projectissue.model.Task;
+import com.planning.projectissue.utils.ExcelUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,13 +11,13 @@ import java.util.List;
 @Service
 public class ExcelService {
     public void processar(Excel excel, List<Task> list){
-        ExcelUtils.inicializarExcel(excel.getCaminho(),"Task");
+        ExcelUtils.inicializarExcel(excel.getCaminho(),"ProductBacklog");
         escreverNoExcel(list);
         ExcelUtils.finalizarExcel(excel.getCaminho());
     }
 
     public void escreverNoExcel(List<Task> list){
-        int numRow = 1;
+        int numRow = 4;
         for (Task task: list) {
             ExcelUtils.criarLinha(numRow++);
             int cellNum = 0;
@@ -28,14 +27,21 @@ public class ExcelService {
             ExcelUtils.escreverNaCelula(task.getTitle());
             ExcelUtils.criarCelula(cellNum++);
             ExcelUtils.escreverNaCelula(task.getDescription());
+            criarCelulas(cellNum);
+        }
+    }
+    private void criarCelulas(int cellNum) {
+        for (int i = 0; i < 12; i++) {
+            ExcelUtils.criarCelula(cellNum++);
+            ExcelUtils.escreverNaCelula(null);
         }
     }
 
     public static void main(String[] args) {
         Excel excel = new Excel();
-        excel.setCaminho("/Users/gui.petena/downloads/planning.xlsm");
-        Task task = new Task("sub-dev","historia para teste","testando pra ver como é");
-        Task task1 = new Task("sub-teste","historia para dev","testando pra saber como é");
+        excel.setCaminho("C:\\Users\\petenag\\Downloads\\issue.xlsm");
+        Task task = new Task("Story","historia para teste","testando pra ver como é");
+        Task task1 = new Task("sub-teste","Story","Story");
         List<Task> list = new ArrayList<>();
         list.add(0,task);
         list.add(1,task1);
