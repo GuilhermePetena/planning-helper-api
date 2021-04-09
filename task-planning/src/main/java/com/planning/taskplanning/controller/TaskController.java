@@ -63,4 +63,21 @@ public class TaskController {
         model2.addAttribute("tasks", TaskService.taskList);
         return "task-list";
     }
+    @GetMapping("/task-edit/{index}")
+    public String mostraFormulario(@PathVariable("index") int index, Model model) {
+        TaskService.taskList.get(index);
+        model.addAttribute("task", TaskService.taskList.get(index));
+        return "task-edit";
+    }
+
+    @PutMapping("/task-edit")
+    public String alterarTask(Task task, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        if (!bindingResult.hasErrors()) {
+            TaskService.taskList.remove(TaskService.taskList.indexOf(task));
+            TaskService.taskList.add(task);
+            redirectAttributes.addFlashAttribute("mensagemTaskedit", "Task atualizada com sucesso");
+            return "redirect:/task-list";
+        }
+        return "task-edit";
+    }
 }
