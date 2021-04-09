@@ -1,6 +1,5 @@
-       <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-       <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
        <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
        <!DOCTYPE html>
        <html lang="pt-BR">
@@ -13,17 +12,17 @@
        <div class="container">
        <nav class="navbar navbar-expand-lg navbar-light bg-light">
          <div class="container-fluid">
-           <a class="navbar-brand" href="#">PlanningHelper</a>
+           <a class="navbar-brand"><b>PlanningHelper</b></a>
            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
              <span class="navbar-toggler-icon"></span>
            </button>
            <div class="collapse navbar-collapse" id="navbarNav">
              <ul class="navbar-nav">
                <li class="nav-item">
-                 <a class="nav-link active" aria-current="page" href="/task">Cadastro de issues</a>
+                 <a class="nav-link active" aria-current="page" href="/task">Cadastro de task</a>
                </li>
                <li class="nav-item">
-                 <a class="nav-link" href="/showList">Lista de issues</a>
+                 <a class="nav-link active" aria-current="page" href="/task-list">Lista de task</a>
                </li>
              </ul>
            </div>
@@ -36,7 +35,7 @@
                	<h4>${mensagemExcel}</h4>
             </div>
        </c:if>
-       <form:form action="/addExcel" modelAttribute="excel" method="post">
+       <form:form action="/task-list" modelAttribute="excel" method="post">
        <div class="col">
               <form:label path="caminho" for="exampleFormControlInput1" class="form-label">Caminho(Excel):</form:label>
               <form:input type="text" name="caminho" path="caminho" class="form-control" id="exampleFormControlInput1"/>
