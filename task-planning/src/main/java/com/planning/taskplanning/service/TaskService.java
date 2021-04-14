@@ -1,6 +1,6 @@
-package com.planning.projectissue.service;
+package com.planning.taskplanning.service;
 
-import com.planning.projectissue.model.Task;
+import com.planning.taskplanning.model.Task;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
