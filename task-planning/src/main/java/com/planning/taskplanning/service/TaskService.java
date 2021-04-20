@@ -9,28 +9,68 @@ import java.util.List;
 @Component
 public class TaskService {
 
-    public static List<Task> taskList = new ArrayList<>();
+    @Autowired
+    private TaskRepository repository;
 
-    public List<Task> addList(Task task){
-        taskList.add(task);
-        return taskList;
-    }
+    private static String nomeDoTime;
 
-    public List<Task> addListWithPosition(Task task, int index){
-        taskList.add(index, task);
-        return taskList;
-    }
-    public List<Task> getAll(){
-        return taskList;
-    }
-    public Task getTaskByIndex(int index){
-        return taskList.get(index);
-    }
-    public Task getTaskByObject(Task task){
-        return taskList.get(taskList.indexOf(task));
+    public void adicionarNomeDoTime(String time){
+        nomeDoTime = time;
     }
 
-    public Task remove(int index){
-        return taskList.remove(index);
+    public List<Task> listarTasks(){
+        return repository.findAll();
+    }
+
+    public Task obterTask(UUID id){
+        return repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Id inválido"));
+    }
+    
+    public Object criarTask(Task task){
+        if(task.getId() != null){
+            return repository.save(task);
+        }
+        else {
+            return new IllegalArgumentException("Objeto inválido");
+        }
+    }
+
+    public Object atualizarTask(UUID id, Task taskAtualizada){
+        Optional<Task> task = repository.findById(id);
+        if (!task.isPresent()){
+            return new IllegalArgumentException("Objeto inválido");
+        } else {
+            task.get().setComplexityPoints(taskAtualizada.getComplexityPoints());
+            task.get().setComponents(taskAtualizada.getComponents());
+            task.get().setDescription(taskAtualizada.getDescription());
+            task.get().setDueDate(taskAtualizada.getDueDate());
+            task.get().setIssueId(taskAtualizada.getIssueId());
+            task.get().setEpicLink(taskAtualizada.getEpicLink());
+            task.get().setFixVersions(taskAtualizada.getFixVersions());
+            task.get().setJiraKey(taskAtualizada.getJiraKey());
+            task.get().setHours(taskAtualizada.getHours());
+            task.get().setPriority(taskAtualizada.getPriority());
+            task.get().setLabels(taskAtualizada.getLabels());
+            task.get().setOriginalEstimate(taskAtualizada.getOriginalEstimate());
+            task.get().setTeam(taskAtualizada.getTeam());
+            task.get().setSummary(taskAtualizada.getSummary());
+            return task;
+        }
+    }
+
+    public void delete(UUID id){
+        repository.deleteById(id);
+    }
+
+    public void criarJiraImporter() {
+        int contador = 0;
+        List<Task> list = repository.findAll();
+        for (Task task: list) {
+            task.setTeam(nomeDoTime);
+            task.setIssueId(contador++);
+            task.setOriginalEstimate(task.getHours()*3600);
+        }
+        new CsvUtils().escreverCsv(list);
     }
 }
