@@ -10,45 +10,53 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RestController
 @RequestMapping("/task")
 public class TaskController {
 
     @Autowired
-    private ExcelService excelService;
-    @Autowired
     private TaskService taskService;
+
+    @PostMapping("/addTeam")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addTime(@RequestParam String nomeTime) {
+        taskService.adicionarNomeDoTime(nomeTime);
+    }
+
+    @PostMapping("/exportJiraImporter")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void criarJiraImporter() {
+        taskService.criarJiraImporter();
+    }
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<Task> getAll() {
-        return taskService.getAll();
+        return taskService.listarTasks();
     }
 
-    @GetMapping("/{index}")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task findOne(@PathVariable("index") int index) {
-        return taskService.getTaskByIndex(index);
+    public Task findOne(@PathVariable("id") UUID id) {
+        return taskService.obterTask(id);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Task create(@RequestBody Task task) {
-         taskService.addList(task);
-         return taskService.getTaskByObject(task);
+    public Object create(@RequestBody Task task) {
+         return taskService.criarTask(task);
     }
 
-    @PutMapping("/{index}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task update(@PathVariable("index") int index, @RequestBody Task task) {
-        taskService.remove(index);
-        taskService.addListWithPosition(task, index);
-        return taskService.getTaskByIndex(index);
+    public Object update(@PathVariable("id") UUID id, @RequestBody Task task) {
+        return taskService.atualizarTask(id, task);
     }
 
-    @DeleteMapping("/{index}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Task delete(@PathVariable("index") int index){
-        return taskService.remove(index);
+    public void delete(@PathVariable("id") UUID id){
+         taskService.delete(id);
     }
 }
