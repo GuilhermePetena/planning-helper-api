@@ -1,0 +1,196 @@
+{
+	"info": {
+		"_postman_id": "6087f052-443b-44a6-a6a9-c85a390fa0ca",
+		"name": "TesteProjetos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"issueType\": \"dev\",\n    \"description\": \"dev\",\n    \"title\": \"dev\",\n    \"hours\": 2,\n    \"issueId\":0,\n    \"jiraKey\":\"CSEG-1244\",\n    \"epicLink\":\"\",\n    \"complexityPoints\":\"\",\n    \"priority\":\"\",\n    \"components\":\"\",\n    \"fixVersions\":\"\",\n    \"labels\":\"\",\n    \"dueDate\":\"\",\n    \"team\":\"\",\n    \"originalEstimate\":0\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/task",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddTime",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"issueType\": \"dev\",\n    \"description\": \"dev\",\n    \"title\": \"dev\",\n    \"hours\": 2,\n    \"issueId\":0,\n    \"jiraKey\":\"CSEG-1244\",\n    \"epicLink\":\"\",\n    \"complexityPoints\":\"\",\n    \"priority\":\"\",\n    \"components\":\"\",\n    \"fixVersions\":\"\",\n    \"labels\":\"\",\n    \"dueDate\":\"\",\n    \"team\":\"\",\n    \"originalEstimate\":0\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/task?addTime=\"Contratação 2\"",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task"
+					],
+					"query": [
+						{
+							"key": "addTime",
+							"value": "\"Contratação 2\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gerarJiraImporter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/task/exportJiraImporter",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task",
+						"exportJiraImporter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAll",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/task",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOne",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/task/c0e71d67-79cd-457b-8721-59a059549dfb",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task",
+						"c0e71d67-79cd-457b-8721-59a059549dfb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": \"904d001d-5a95-4f97-a244-a2587f7e7ae9\",\n        \"issueType\": \"dev\",\n        \"description\": \"dev\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
+				},
+				"url": {
+					"raw": "localhost:8080/task/904d001d-5a95-4f97-a244-a2587f7e7ae9",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task",
+						"904d001d-5a95-4f97-a244-a2587f7e7ae9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": \"904d001d-5a95-4f97-a244-a2587f7e7ae9\",\n        \"issueType\": \"dev\",\n        \"description\": \"dev\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
+				},
+				"url": {
+					"raw": "localhost:8080/task/904d001d-5a95-4f97-a244-a2587f7e7ae9",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"task",
+						"904d001d-5a95-4f97-a244-a2587f7e7ae9"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
