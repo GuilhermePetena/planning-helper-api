@@ -46,23 +46,20 @@
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"issueType\": \"dev\",\n    \"description\": \"dev\",\n    \"title\": \"dev\",\n    \"hours\": 2,\n    \"issueId\":0,\n    \"jiraKey\":\"CSEG-1244\",\n    \"epicLink\":\"\",\n    \"complexityPoints\":\"\",\n    \"priority\":\"\",\n    \"components\":\"\",\n    \"fixVersions\":\"\",\n    \"labels\":\"\",\n    \"dueDate\":\"\",\n    \"team\":\"\",\n    \"originalEstimate\":0\n}"
-				},
 				"url": {
-					"raw": "localhost:8080/task?addTime=\"Contratação 2\"",
+					"raw": "localhost:8080/task/addTeam?nomeTime=\"Contratatos\"",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"task"
+						"task",
+						"addTeam"
 					],
 					"query": [
 						{
-							"key": "addTime",
-							"value": "\"Contratação 2\""
+							"key": "nomeTime",
+							"value": "\"Contratatos\""
 						}
 					]
 				}
@@ -146,17 +143,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n        \"id\": \"904d001d-5a95-4f97-a244-a2587f7e7ae9\",\n        \"issueType\": \"dev\",\n        \"description\": \"dev\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
+					"raw": "{\n        \"id\": \"a4479c19-d550-40c4-8c42-820f8abfe00c\",\n        \"issueType\": \"dev\",\n        \"description\": \"test\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
 				},
 				"url": {
-					"raw": "localhost:8080/task/904d001d-5a95-4f97-a244-a2587f7e7ae9",
+					"raw": "localhost:8080/task/a4479c19-d550-40c4-8c42-820f8abfe00c",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"task",
-						"904d001d-5a95-4f97-a244-a2587f7e7ae9"
+						"a4479c19-d550-40c4-8c42-820f8abfe00c"
 					]
 				}
 			},
@@ -179,14 +176,14 @@
 					"raw": "{\n        \"id\": \"904d001d-5a95-4f97-a244-a2587f7e7ae9\",\n        \"issueType\": \"dev\",\n        \"description\": \"dev\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
 				},
 				"url": {
-					"raw": "localhost:8080/task/904d001d-5a95-4f97-a244-a2587f7e7ae9",
+					"raw": "localhost:8080/task/a4479c19-d550-40c4-8c42-820f8abfe00c",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"task",
-						"904d001d-5a95-4f97-a244-a2587f7e7ae9"
+						"a4479c19-d550-40c4-8c42-820f8abfe00c"
 					]
 				}
 			},
