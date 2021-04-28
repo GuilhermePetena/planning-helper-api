@@ -19,44 +19,60 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/addTeam")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addTime(@RequestParam String nomeTime) {
-        taskService.adicionarNomeDoTime(nomeTime);
+    public ResponseEntity addTime(@RequestParam String nomeTime) {
+        if(nomeTime.isBlank()){
+            return ResponseEntity.badRequest().build();
+        }else {
+            taskService.adicionarNomeDoTime(nomeTime);
+            return ResponseEntity.ok().build();
+        }
     }
 
     @PostMapping("/exportJiraImporter")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void criarJiraImporter() {
+    public ResponseEntity<String> criarJiraImporter() {
         taskService.criarJiraImporter();
+        return ResponseEntity.ok().body(System.getProperty("user.home")+"\\downloads\\jiraImporter.txt");
     }
 
     @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public List<Task> getAll() {
-        return taskService.listarTasks();
+    public ResponseEntity<List<Task>> getAll() {
+        return ResponseEntity.ok(taskService.listarTasks());
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Task findOne(@PathVariable("id") UUID id) {
-        return taskService.obterTask(id);
+    public ResponseEntity<Task> findOne(@PathVariable("id") UUID id) {
+        if(taskService.taskExiste(id)){
+            return ResponseEntity.ok(taskService.obterTask(id).get());
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Object create(@RequestBody Task task) {
-         return taskService.criarTask(task);
+    public ResponseEntity<Task> create(@RequestBody Task task) {
+         return ResponseEntity.status(HttpStatus.CREATED).body(taskService.criarTask(task));
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Object update(@PathVariable("id") UUID id, @RequestBody Task task) {
-        return taskService.atualizarTask(id, task);
+    public ResponseEntity<Task> update(@PathVariable("id") UUID id, @RequestBody Task task) {
+        if(taskService.taskExiste(id) && !task.getIssueType().isBlank()){
+            return  ResponseEntity.ok().body(taskService.atualizarTask(id, task).get());
+        }
+        else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") UUID id){
-         taskService.delete(id);
+    public ResponseEntity delete(@PathVariable("id") UUID id){
+        if (taskService.taskExiste(id)){
+            taskService.delete(id);
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 }
