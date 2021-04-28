@@ -6,13 +6,17 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class TaskService {
 
     @Autowired
     private TaskRepository repository;
 
     private static String nomeDoTime;
+
+    public boolean taskExiste(UUID id){
+        return repository.existsById(id);
+    }
 
     public void adicionarNomeDoTime(String time){
         nomeDoTime = time;
@@ -22,25 +26,16 @@ public class TaskService {
         return repository.findAll();
     }
 
-    public Task obterTask(UUID id){
-        return repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Id inválido"));
+    public Optional<Task> obterTask(UUID id){
+        return repository.findById(id);
     }
     
-    public Object criarTask(Task task){
-        if(task.getId() != null){
-            return repository.save(task);
-        }
-        else {
-            return new IllegalArgumentException("Objeto inválido");
-        }
+    public Task criarTask(Task task){
+        return repository.save(task);
     }
 
-    public Object atualizarTask(UUID id, Task taskAtualizada){
-        Optional<Task> task = repository.findById(id);
-        if (!task.isPresent()){
-            return new IllegalArgumentException("Objeto inválido");
-        } else {
+        public Optional<Task> atualizarTask(UUID id, Task taskAtualizada){
+            Optional<Task> task = repository.findById(id);
             task.get().setComplexityPoints(taskAtualizada.getComplexityPoints());
             task.get().setComponents(taskAtualizada.getComponents());
             task.get().setDescription(taskAtualizada.getDescription());
@@ -55,9 +50,9 @@ public class TaskService {
             task.get().setOriginalEstimate(taskAtualizada.getOriginalEstimate());
             task.get().setTeam(taskAtualizada.getTeam());
             task.get().setSummary(taskAtualizada.getSummary());
+            criarTask(task.get());
             return task;
         }
-    }
 
     public void delete(UUID id){
         repository.deleteById(id);
