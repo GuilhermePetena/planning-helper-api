@@ -1,5 +1,9 @@
 package com.planning.taskplanning.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.UUID;
+
 @Entity
 public class Story {
 
@@ -49,4 +53,5 @@ public class Story {
                 ", storyNumber='" + storyNumber + '\'' +
                 '}';
     }
+}
 

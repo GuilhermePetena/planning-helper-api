@@ -1,5 +1,10 @@
 package com.planning.taskplanning.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
+import java.util.UUID;
+
 @Entity
 public class Task {
 
