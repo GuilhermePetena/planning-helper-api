@@ -35,4 +35,23 @@ public class StoryController {
     public ResponseEntity<Story> create(@RequestBody Story story) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storyService.criarStory(story));
     }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Story> update(@PathVariable("id") UUID id, @RequestBody Story story) {
+    if(storyService.storyExiste(id)){
+        return ResponseEntity.ok().body(storyService.atualizarStory(id, story));
+    }else {
+        return ResponseEntity.notFound().build();
+    }
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Story> delete(@PathVariable("id") UUID id) {
+    if (storyService.storyExiste(id)) {
+        storyService.removerStory(id);
+        return ResponseEntity.ok().build();
+    } else {
+        return ResponseEntity.notFound().build();
+    }
+    }
 }
