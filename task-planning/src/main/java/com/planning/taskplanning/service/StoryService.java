@@ -26,4 +26,14 @@ public class StoryService {
     public boolean storyExiste(UUID id){
         return repository.existsById(id);
     }
+    public void removerStory(UUID id){
+    repository.deleteById(id);
+    }
+    public Story atualizarStory(UUID id, Story story){
+    Story storyAntiga = obterStory(id);
+    storyAntiga.setStoryNumber(story.getStoryNumber());
+    storyAntiga.setTitle(story.getTitle());
+    criarStory(storyAntiga);
+    return storyAntiga;
+    }
 }
