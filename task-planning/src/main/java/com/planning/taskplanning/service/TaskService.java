@@ -64,14 +64,18 @@ public class TaskService {
         repository.deleteById(id);
     }
 
-    public void criarJiraImporter() {
-        int contador = 0;
+    public File criarJiraImporter() {
+        int contador = 1;
         List<Task> list = repository.findAll();
         for (Task task: list) {
             task.setTeam(nomeDoTime);
             task.setIssueId(contador++);
             task.setOriginalEstimate(task.getHours()*3600);
         }
-        new CsvUtils().escreverCsv(list);
+       return new CsvUtils().escreverJiraImporter(list);
+    }
+
+    public File criarPlanningPoker(){
+        return new CsvUtils().escreverPlanningPokerTxt(repository.findAll());
     }
 }
