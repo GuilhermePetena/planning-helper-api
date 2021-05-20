@@ -1,4 +1,4 @@
-package com.planning.projectissue.controller;
+package com.planning.taskplanning.controller;
 
 import com.planning.projectissue.model.Task;
 import com.planning.projectissue.service.TaskService;
