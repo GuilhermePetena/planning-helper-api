@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtils {
-    public void escreverCsv(List<Task> tasks) {
+    public File escreverJiraImporter(List<Task> tasks) {
 
         try {
-            File file = new File(System.getProperty("user.home") + "\\downloads\\jiraImporter.txt");
+            File file = new File("src\\main\\resources\\jiraImporter.txt");
             file.createNewFile();
-            String[] headers = {"Issue Type", "Summary", "Description", "Hours(Planning)", "IssueID", "Parent ID/Jira Key", "Epic Link", "Complexity Points", "Priority", "Components", "Fix Versions", "Labels", "Due Date", "Team", "Original Estimate"};
-            Writer writer = Files.newBufferedWriter(Paths.get(System.getProperty("user.home") + "\\downloads\\jiraImporter.txt"));
+            String[] headers = {"Issue Type", "Summary", "Description", "Hours\n(Planning)", "IssueID", "Parent ID/Jira Key", "Epic Link", "Complexity Points", "Priority", "Components", "Fix Versions", "Labels", "Due Date", "Team", "Original Estimate"};
+            Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
             CSVWriter csvWriter = new CSVWriter(writer);
             List<String[]> linhas = new ArrayList<>();
 
@@ -31,10 +31,34 @@ public class CsvUtils {
 
             csvWriter.flush();
             writer.close();
-        }
-        catch (Exception e){
+
+            return file;
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
+    public File escreverPlanningPokerTxt(List<Task> tasks) {
 
+        try {
+            File file = new File(System.getProperty("user.home") + "\\downloads\\planningpoker.txt");
+            file.createNewFile();
+            Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
+            CSVWriter csvWriter = new CSVWriter(writer);
+            List<String[]> linhas = new ArrayList<>();
+
+            for (Task task : tasks) {
+                linhas.add(new String[]{task.getSummary()});
+            }
+
+            csvWriter.writeAll(linhas);
+
+            csvWriter.flush();
+            writer.close();
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
