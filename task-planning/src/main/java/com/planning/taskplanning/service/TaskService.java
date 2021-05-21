@@ -34,6 +34,10 @@ public class TaskService {
     public List<Task> listarTasks(){
         return repository.findAll();
     }
+    
+    public List<Task> listarTasksByJiraKey(String jiraKey){
+        return repository.findAllByJiraKey_JiraKey(jiraKey);
+    }
 
     public Optional<Task> obterTask(UUID id){
         return repository.findById(id);
