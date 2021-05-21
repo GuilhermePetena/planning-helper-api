@@ -68,7 +68,7 @@ public class TaskController {
 
     @GetMapping()
     public ResponseEntity<List<?>> getAll(@RequestParam(required = false)  boolean exportJiraImporter,
-                                              @RequestParam(required = false) boolean exportPlanningPoker, @RequestParam(required = false) Optional<String> nomeTime) throws FileNotFoundException {
+                                              @RequestParam(required = false) boolean exportPlanningPoker, @RequestParam(required = false) Optional<String> nomeTime, @RequestParam(required = false) Optional<String> jiraKey) throws FileNotFoundException {
         if(exportJiraImporter){
             try { return createJiraImporter(); }
             finally { file.delete(); }
@@ -77,6 +77,8 @@ public class TaskController {
             finally { file.delete(); }
         }if(nomeTime.isPresent()){
             return addTeam(nomeTime);
+        }if (jiraKey.isPresent()){
+            return ResponseEntity.ok(taskService.listarTasksByJiraKey(jiraKey.get()));
         }
         return ResponseEntity.ok(taskService.listarTasks());
     }
