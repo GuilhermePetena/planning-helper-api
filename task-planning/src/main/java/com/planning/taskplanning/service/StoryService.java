@@ -14,26 +14,32 @@ public class StoryService {
     @Autowired
     private StoryRepository repository;
 
+    @Autowired
+    private TaskService taskService;
+
     public List<Story> listarStories(){
         return repository.findAll();
     }
-    public Story obterStory(UUID id){
-        return repository.findById(id).get();
+    public Story obterStory(String jiraKey){
+        return repository.findById(jiraKey).get();
     }
     public Story criarStory(Story story){
         return repository.save(story);
     }
-    public boolean storyExiste(UUID id){
-        return repository.existsById(id);
+
+    public void removerStory(String jiraKey){
+        taskService.deleteAll(jiraKey);
+        repository.deleteById(jiraKey);
     }
-    public void removerStory(UUID id){
-    repository.deleteById(id);
+
+    public Story atualizarStory(String jiraKey, Story story){
+        Story storyAntiga = obterStory(jiraKey);
+        storyAntiga.setJiraKey(story.getJiraKey());
+        storyAntiga.setTitle(story.getTitle());
+        criarStory(storyAntiga);
+        return storyAntiga;
     }
-    public Story atualizarStory(UUID id, Story story){
-    Story storyAntiga = obterStory(id);
-    storyAntiga.setStoryNumber(story.getStoryNumber());
-    storyAntiga.setTitle(story.getTitle());
-    criarStory(storyAntiga);
-    return storyAntiga;
+    public boolean storyExiste(String jiraKey){
+        return repository.existsById(jiraKey);
     }
 }
