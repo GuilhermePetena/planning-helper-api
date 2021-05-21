@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface TaskRepository extends JpaRepository<Task, UUID> {
   void deleteAllByJiraKey_JiraKey(String jiraKey);
+  List<Task> findAllByJiraKey_JiraKey(String jiraKey);
 }
