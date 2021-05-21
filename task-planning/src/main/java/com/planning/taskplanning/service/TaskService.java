@@ -18,6 +18,9 @@ public class TaskService {
     @Autowired
     private TaskRepository repository;
 
+    @Autowired
+    private StoryService storyService;
+
     private static String nomeDoTime;
 
     public boolean taskExiste(UUID id){
@@ -37,6 +40,8 @@ public class TaskService {
     }
     
     public Task criarTask(Task task){
+        Story story = storyService.obterStory(task.getJiraKey().getJiraKey());
+        task.setJiraKey(story);
         return repository.save(task);
     }
 
@@ -56,12 +61,18 @@ public class TaskService {
             task.get().setOriginalEstimate(taskAtualizada.getOriginalEstimate());
             task.get().setTeam(taskAtualizada.getTeam());
             task.get().setSummary(taskAtualizada.getSummary());
+            task.get().setIssueType(taskAtualizada.getIssueType());
             criarTask(task.get());
             return task;
         }
 
     public void delete(UUID id){
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAll(String jiraKey){
+        repository.deleteAllByJiraKey_JiraKey(jiraKey);
     }
 
     public File criarJiraImporter() {
