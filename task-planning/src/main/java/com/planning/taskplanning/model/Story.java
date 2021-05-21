@@ -8,25 +8,16 @@ import java.util.UUID;
 public class Story {
 
     @Id
-    private UUID id = UUID.randomUUID();
+    private String jiraKey;
     private String title;
-    private String storyNumber;
+
 
     public Story() {
     }
 
-    public Story(UUID id, String title, String storyNumber) {
-        this.id = id;
+    public Story(String title, String storyNumber) {
         this.title = title;
-        this.storyNumber = storyNumber;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
+        this.jiraKey = storyNumber;
     }
 
     public String getTitle() {
@@ -37,20 +28,19 @@ public class Story {
         this.title = title;
     }
 
-    public String getStoryNumber() {
-        return storyNumber;
+    public String getJiraKey() {
+        return jiraKey;
     }
 
-    public void setStoryNumber(String storyNumber) {
-        this.storyNumber = storyNumber;
+    public void setJiraKey(String jiraKey) {
+        this.jiraKey = jiraKey;
     }
 
     @Override
     public String toString() {
         return "Story{" +
-                "id=" + id +
+                "jiraKey='" + jiraKey + '\'' +
                 ", title='" + title + '\'' +
-                ", storyNumber='" + storyNumber + '\'' +
                 '}';
     }
 }
