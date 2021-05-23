@@ -1,46 +1,87 @@
 package com.planning.taskplanning.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.util.Objects;
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class Task {
+@Table(name = "task")
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
-    private UUID id = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "issue_type")
     private String issueType;
-    @Column(length=100000)
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "summary")
     private String summary;
+
+    @Column(name = "hours")
     private Long hours;
+
+    @Column(name = "issue_id")
     private Integer issueId;
-    @ManyToOne
-    private Story jiraKey;
+
+    @Column(name = "epic_link")
     private String epicLink;
+
+    @Column(name = "complexity_points")
     private String complexityPoints;
+
+    @Column(name = "priority")
     private String priority;
+
+    @Column(name = "components")
     private String components;
+
+    @Column(name = "fix_versions")
     private String fixVersions;
+
+    @Column(name = "labels")
     private String labels;
+
+    @Column(name = "due_date")
     private String dueDate;
+
+    @Column(name = "team")
     private String team;
+
+    @Column(name = "original_estimate")
     private Long originalEstimate;
 
-    public Task() {
-    }
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "tasks" }, allowSetters = true)
+    private Story story;
 
-    public UUID getId() {
+    // jhipster-needle-entity-add-field - JHipster will add fields here
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
+    public Task id(Long id) {
+        this.id = id;
+        return this;
+    }
+
     public String getIssueType() {
-        return issueType;
+        return this.issueType;
+    }
+
+    public Task issueType(String issueType) {
+        this.issueType = issueType;
+        return this;
     }
 
     public void setIssueType(String issueType) {
@@ -48,7 +89,12 @@ public class Task {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
+    }
+
+    public Task description(String description) {
+        this.description = description;
+        return this;
     }
 
     public void setDescription(String description) {
@@ -56,7 +102,12 @@ public class Task {
     }
 
     public String getSummary() {
-        return summary;
+        return this.summary;
+    }
+
+    public Task summary(String summary) {
+        this.summary = summary;
+        return this;
     }
 
     public void setSummary(String summary) {
@@ -64,63 +115,38 @@ public class Task {
     }
 
     public Long getHours() {
-        return hours;
+        return this.hours;
     }
 
-    public void setHours(long hours) {
+    public Task hours(Long hours) {
+        this.hours = hours;
+        return this;
+    }
+
+    public void setHours(Long hours) {
         this.hours = hours;
     }
 
     public Integer getIssueId() {
-        return issueId;
+        return this.issueId;
+    }
+
+    public Task issueId(Integer issueId) {
+        this.issueId = issueId;
+        return this;
     }
 
     public void setIssueId(Integer issueId) {
         this.issueId = issueId;
     }
 
-    public Story getJiraKey() {
-        return jiraKey;
-    }
-
-    public void setJiraKey(Story jiraKey) {
-        this.jiraKey = jiraKey;
-    }
-
-    public String getLabels() {
-        return labels;
-    }
-
-    public void setLabels(String labels) {
-        this.labels = labels;
-    }
-
-    public String getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
-
-    public String getTeam() {
-        return team;
-    }
-
-    public void setTeam(String team) {
-        this.team = team;
-    }
-
-    public Long getOriginalEstimate() {
-        return originalEstimate;
-    }
-
-    public void setOriginalEstimate(long originalEstimate) {
-        this.originalEstimate = originalEstimate;
-    }
-
     public String getEpicLink() {
-        return epicLink;
+        return this.epicLink;
+    }
+
+    public Task epicLink(String epicLink) {
+        this.epicLink = epicLink;
+        return this;
     }
 
     public void setEpicLink(String epicLink) {
@@ -128,7 +154,12 @@ public class Task {
     }
 
     public String getComplexityPoints() {
-        return complexityPoints;
+        return this.complexityPoints;
+    }
+
+    public Task complexityPoints(String complexityPoints) {
+        this.complexityPoints = complexityPoints;
+        return this;
     }
 
     public void setComplexityPoints(String complexityPoints) {
@@ -136,7 +167,12 @@ public class Task {
     }
 
     public String getPriority() {
-        return priority;
+        return this.priority;
+    }
+
+    public Task priority(String priority) {
+        this.priority = priority;
+        return this;
     }
 
     public void setPriority(String priority) {
@@ -144,7 +180,12 @@ public class Task {
     }
 
     public String getComponents() {
-        return components;
+        return this.components;
+    }
+
+    public Task components(String components) {
+        this.components = components;
+        return this;
     }
 
     public void setComponents(String components) {
@@ -152,51 +193,122 @@ public class Task {
     }
 
     public String getFixVersions() {
-        return fixVersions;
+        return this.fixVersions;
+    }
+
+    public Task fixVersions(String fixVersions) {
+        this.fixVersions = fixVersions;
+        return this;
     }
 
     public void setFixVersions(String fixVersions) {
         this.fixVersions = fixVersions;
     }
 
-    public Task(UUID id, String issueType, String description, String summary, Long hours, Integer issueId, Story jiraKey, String epicLink, String complexityPoints, String priority, String components, String fixVersions, String labels, String dueDate, String team, Long originalEstimate) {
-        this.id = id;
-        this.issueType = issueType;
-        this.description = description;
-        this.summary = summary;
-        this.hours = hours;
-        this.issueId = issueId;
-        this.jiraKey = jiraKey;
-        this.epicLink = epicLink;
-        this.complexityPoints = complexityPoints;
-        this.priority = priority;
-        this.components = components;
-        this.fixVersions = fixVersions;
+    public String getLabels() {
+        return this.labels;
+    }
+
+    public Task labels(String labels) {
         this.labels = labels;
+        return this;
+    }
+
+    public void setLabels(String labels) {
+        this.labels = labels;
+    }
+
+    public String getDueDate() {
+        return this.dueDate;
+    }
+
+    public Task dueDate(String dueDate) {
         this.dueDate = dueDate;
+        return this;
+    }
+
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getTeam() {
+        return this.team;
+    }
+
+    public Task team(String team) {
         this.team = team;
+        return this;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public Long getOriginalEstimate() {
+        return this.originalEstimate;
+    }
+
+    public Task originalEstimate(Long originalEstimate) {
+        this.originalEstimate = originalEstimate;
+        return this;
+    }
+
+    public void setOriginalEstimate(Long originalEstimate) {
         this.originalEstimate = originalEstimate;
     }
 
+    public Story getStory() {
+        return this.story;
+    }
+
+    public Task story(Story story) {
+        this.setStory(story);
+        return this;
+    }
+
+    public void setStory(Story story) {
+        this.story = story;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Task)) {
+            return false;
+        }
+        return id != null && id.equals(((Task) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
     @Override
     public String toString() {
         return "Task{" +
-                "id=" + id +
-                ", issueType='" + issueType + '\'' +
-                ", description='" + description + '\'' +
-                ", summary='" + summary + '\'' +
-                ", hours='" + hours + '\'' +
-                ", issueId=" + issueId +
-                ", jiraKey='" + jiraKey + '\'' +
-                ", epicLink='" + epicLink + '\'' +
-                ", complexityPoints='" + complexityPoints + '\'' +
-                ", priority='" + priority + '\'' +
-                ", components='" + components + '\'' +
-                ", fixVersions='" + fixVersions + '\'' +
-                ", labels='" + labels + '\'' +
-                ", dueDate='" + dueDate + '\'' +
-                ", team='" + team + '\'' +
-                ", originalEstimate=" + originalEstimate +
-                '}';
+                "id=" + getId() +
+                ", issueType='" + getIssueType() + "'" +
+                ", description='" + getDescription() + "'" +
+                ", summary='" + getSummary() + "'" +
+                ", hours=" + getHours() +
+                ", issueId=" + getIssueId() +
+                ", story='" + getStory() + "'" +
+                ", epicLink='" + getEpicLink() + "'" +
+                ", complexityPoints='" + getComplexityPoints() + "'" +
+                ", priority='" + getPriority() + "'" +
+                ", components='" + getComponents() + "'" +
+                ", fixVersions='" + getFixVersions() + "'" +
+                ", labels='" + getLabels() + "'" +
+                ", dueDate='" + getDueDate() + "'" +
+                ", team='" + getTeam() + "'" +
+                ", originalEstimate=" + getOriginalEstimate() +
+                "}";
     }
 }

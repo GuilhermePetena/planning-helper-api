@@ -1,45 +1,53 @@
 package com.planning.taskplanning.service;
 
 import com.planning.taskplanning.model.Story;
-import com.planning.taskplanning.repository.StoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
-@Service
-public class StoryService {
 
-    @Autowired
-    private StoryRepository repository;
+/**
+ * Service Interface for managing {@link Story}.
+ */
+public interface StoryService {
+    /**
+     * Save a story.
+     *
+     * @param story the entity to save.
+     * @return the persisted entity.
+     */
+    Story save(Story story);
 
-    @Autowired
-    private TaskService taskService;
+    /**
+     * Partially updates a story.
+     *
+     * @param story the entity to update partially.
+     * @return the persisted entity.
+     */
+    Optional<Story> partialUpdate(Story story);
 
-    public List<Story> listarStories(){
-        return repository.findAll();
-    }
-    public Story obterStory(String jiraKey){
-        return repository.findById(jiraKey).get();
-    }
-    public Story criarStory(Story story){
-        return repository.save(story);
-    }
+    /**
+     * Get all the stories.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Story> findAll(Pageable pageable);
 
-    public void removerStory(String jiraKey){
-        taskService.deleteAll(jiraKey);
-        repository.deleteById(jiraKey);
-    }
+    /**
+     * Get the "id" story.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    Optional<Story> findOne(Long id);
 
-    public Story atualizarStory(String jiraKey, Story story){
-        Story storyAntiga = obterStory(jiraKey);
-        storyAntiga.setJiraKey(story.getJiraKey());
-        storyAntiga.setTitle(story.getTitle());
-        criarStory(storyAntiga);
-        return storyAntiga;
-    }
-    public boolean storyExiste(String jiraKey){
-        return repository.existsById(jiraKey);
-    }
+    /**
+     * Delete the "id" story.
+     *
+     * @param id the id of the entity.
+     */
+    void delete(Long id);
 }
+

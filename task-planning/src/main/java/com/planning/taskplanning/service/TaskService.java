@@ -1,96 +1,93 @@
 package com.planning.taskplanning.service;
 
 import com.planning.taskplanning.model.Task;
-import com.planning.taskplanning.repository.TaskRepository;
-import com.planning.taskplanning.utils.CsvUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
-@Service
-public class TaskService {
+/**
+ * Service Interface for managing {@link Task}.
+ */
+public interface TaskService {
+    /**
+     * Save a task.
+     *
+     * @param task the entity to save.
+     * @return the persisted entity.
+     */
+    Task save(Task task);
 
-    @Autowired
-    private TaskRepository repository;
+    /**
+     * Add the team name.
+     *
+     * @param teamName the entity to save.
+     */
+    void addTeamName(String teamName);
 
-    @Autowired
-    private StoryService storyService;
+    /**
+     * Get all the tasks.
+     *
+     * @return the list of entities.
+     */
+    List<Task> findAll();
 
-    private static String nomeDoTime;
+    /**
+     * Get all the tasks of a story.
+     *
+     * @param storyNumber the jira number information.
+     * @return the list of entities.
+     */
+    List<Task> findAllByStoryNumber(String storyNumber);
 
-    public boolean taskExiste(UUID id){
-        return repository.existsById(id);
-    }
+    /**
+     * Get the "id" task.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    Optional<Task> findOne(Long id);
 
-    public void adicionarNomeDoTime(String time){
-        nomeDoTime = time;
-    }
+    /**
+     * Delete the "id" task.
+     *
+     * @param id the id of the entity.
+     */
+    void delete(Long id);
 
-    public List<Task> listarTasks(){
-        return repository.findAll();
-    }
-    
-    public List<Task> listarTasksByJiraKey(String jiraKey){
-        return repository.findAllByJiraKey_JiraKey(jiraKey);
-    }
+    /**
+     * Delete task using the storyNumberField.
+     *
+     * @param storyNumber the id of the entity.
+     */
+    void deleteAllByStoryNumber(String storyNumber);
 
-    public Optional<Task> obterTask(UUID id){
-        return repository.findById(id);
-    }
-    
-    public Task criarTask(Task task){
-        Story story = storyService.obterStory(task.getJiraKey().getJiraKey());
-        task.setJiraKey(story);
-        return repository.save(task);
-    }
+    /**
+     * Download of the text files
+     *
+     * @param jira flag to know if is jira file..
+     * @return
+     */
+    List<Object> downloadTextFile(boolean jira) throws IOException;
 
-        public Optional<Task> atualizarTask(UUID id, Task taskAtualizada){
-            Optional<Task> task = repository.findById(id);
-            task.get().setComplexityPoints(taskAtualizada.getComplexityPoints());
-            task.get().setComponents(taskAtualizada.getComponents());
-            task.get().setDescription(taskAtualizada.getDescription());
-            task.get().setDueDate(taskAtualizada.getDueDate());
-            task.get().setIssueId(taskAtualizada.getIssueId());
-            task.get().setEpicLink(taskAtualizada.getEpicLink());
-            task.get().setFixVersions(taskAtualizada.getFixVersions());
-            task.get().setJiraKey(taskAtualizada.getJiraKey());
-            task.get().setHours(taskAtualizada.getHours());
-            task.get().setPriority(taskAtualizada.getPriority());
-            task.get().setLabels(taskAtualizada.getLabels());
-            task.get().setOriginalEstimate(taskAtualizada.getOriginalEstimate());
-            task.get().setTeam(taskAtualizada.getTeam());
-            task.get().setSummary(taskAtualizada.getSummary());
-            task.get().setIssueType(taskAtualizada.getIssueType());
-            criarTask(task.get());
-            return task;
-        }
+    /**
+     * Create the text files
+     *
+     * @param jira flag to know if is jira file..
+     */
+    String createFile(boolean jira) throws IOException;
 
-    public void delete(UUID id){
-        repository.deleteById(id);
-    }
+    /**
+     * Create the planningPoker text file
+     *
+     * @return
+     */
+    List<Object> createPlanningPokerTxt() throws IOException;
 
-    @Transactional
-    public void deleteAll(String jiraKey){
-        repository.deleteAllByJiraKey_JiraKey(jiraKey);
-    }
-
-    public File criarJiraImporter() {
-        int contador = 1;
-        List<Task> list = repository.findAll();
-        for (Task task: list) {
-            task.setTeam(nomeDoTime);
-            task.setIssueId(contador++);
-            task.setOriginalEstimate(task.getHours()*3600);
-        }
-       return new CsvUtils().escreverJiraImporter(list);
-    }
-
-    public File criarPlanningPoker(){
-        return new CsvUtils().escreverPlanningPokerTxt(repository.findAll());
-    }
+    /**
+     * Create the jiraImporter text file
+     *
+     * @return
+     */
+    List<Object> createJiraImporterTxt() throws IOException;
 }

@@ -1,0 +1,4 @@
+"Issue Type","Summary","Description","Hours
+(Planning)","IssueID","Parent ID/Jira Key","Epic Link","Complexity Points","Priority","Components","Fix Versions","Labels","Due Date","Team","Original Estimate"
+"Sub-task","task","task","5","1","CSGERSA-1234","www.com.br","20","ALTA","varios","1","teste_teste","12/12/12",,"18000"
+"Sub-task","task","task","5","2","CSGERSA-1234","www.com.br","20","ALTA","varios","1","teste_teste","12/12/12",,"18000"

@@ -15,7 +15,7 @@ public class CsvUtils {
     public File escreverJiraImporter(List<Task> tasks) {
 
         try {
-            File file = new File("src\\main\\resources\\jiraImporter.txt");
+            File file = new File("src/main/resources/jiraImporter.txt");
             file.createNewFile();
             String[] headers = {"Issue Type", "Summary", "Description", "Hours\n(Planning)", "IssueID", "Parent ID/Jira Key", "Epic Link", "Complexity Points", "Priority", "Components", "Fix Versions", "Labels", "Due Date", "Team", "Original Estimate"};
             Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
@@ -23,7 +23,7 @@ public class CsvUtils {
             List<String[]> linhas = new ArrayList<>();
 
             for (Task task : tasks) {
-                linhas.add(new String[]{task.getIssueType(), task.getSummary(), task.getDescription(), task.getHours().toString(), task.getIssueId().toString(), task.getJiraKey(), task.getEpicLink(), task.getComplexityPoints(), task.getPriority(), task.getComponents(), task.getFixVersions(), task.getLabels(), task.getDueDate(), task.getTeam(), task.getOriginalEstimate().toString()});
+                linhas.add(new String[]{task.getIssueType(), task.getSummary(), task.getDescription(), task.getHours().toString(), task.getIssueId().toString(), task.getStory().getStoryNumber(), task.getEpicLink(), task.getComplexityPoints(), task.getPriority(), task.getComponents(), task.getFixVersions(), task.getLabels(), task.getDueDate(), task.getTeam(), task.getOriginalEstimate().toString()});
             }
 
             csvWriter.writeNext(headers);
@@ -41,7 +41,7 @@ public class CsvUtils {
     public File escreverPlanningPokerTxt(List<Task> tasks) {
 
         try {
-            File file = new File(System.getProperty("user.home") + "\\downloads\\planningpoker.txt");
+            File file = new File("src/main/resources/planningpoker.txt");
             file.createNewFile();
             Writer writer = Files.newBufferedWriter(Paths.get(file.getPath()));
             CSVWriter csvWriter = new CSVWriter(writer);
