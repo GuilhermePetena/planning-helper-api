@@ -37,12 +37,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     private static String teamName;
-    private static File file;
+    public static File file;
 
     @Override
-    public void addTeamName(String team) {
-        teamName = team;
-    }
+    public void addTeamName(String team) { teamName = team; }
 
     @Override
     public Task save(Task task) {
@@ -85,15 +83,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Object> createJiraImporterTxt() throws IOException {
-        createJiraImporter();
-        return downloadTextFile(true);
+    public InputStreamResource returnJiraImporterTxt() throws IOException {
+        return downloadTextFile();
     }
 
     @Override
-    public List<Object> createPlanningPokerTxt() throws IOException {
-        createPlanningPoker();
-        return downloadTextFile(false);
+    public InputStreamResource returnPlanningPokerTxt() throws IOException {
+        return downloadTextFile();
     }
 
     public File createJiraImporter() {
@@ -112,7 +108,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public String createFile(boolean jira) throws IOException {
+    public String createFile(boolean jira) {
         String fileName;
         if (jira) {
             file = createJiraImporter();
@@ -125,11 +121,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Object> downloadTextFile(boolean jira) throws IOException {
-        String fileName = createFile(jira);
+    public InputStreamResource downloadTextFile() throws IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
         InputStreamResource inputStreamResource = new InputStreamResource(fileInputStream);
 
-        return List.of(inputStreamResource, fileName);
+        return inputStreamResource;
     }
 }

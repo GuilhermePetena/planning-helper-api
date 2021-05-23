@@ -4,6 +4,7 @@ import com.planning.taskplanning.controller.errors.BadRequestAlertException;
 import com.planning.taskplanning.model.Task;
 import com.planning.taskplanning.repository.TaskRepository;
 import com.planning.taskplanning.service.TaskService;
+import com.planning.taskplanning.service.impl.TaskServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -12,11 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -31,8 +30,6 @@ public class TaskController {
     private final TaskService taskService;
 
     private final TaskRepository taskRepository;
-
-    private File file;
 
     public TaskController(TaskService taskService, TaskRepository taskRepository) {
         this.taskService = taskService;
@@ -95,38 +92,35 @@ public class TaskController {
      */
     @GetMapping()
     public ResponseEntity getAll(@RequestParam(required = false) boolean exportJiraImporter,
-                                 @RequestParam(required = false) boolean exportPlanningPoker, @RequestParam(required = false) Optional<String> nomeTime, @RequestParam(required = false) Optional<String> jiraKey) throws IOException {
-        List<Object> list;
+                                 @RequestParam(required = false) boolean exportPlanningPoker,
+                                 @RequestParam(required = false) Optional<String> nomeTime,
+                                 @RequestParam(required = false) Optional<String> jiraKey) throws IOException {
         if (exportJiraImporter) {
             log.debug("REST request to export jiraImporter");
-            list = taskService.createJiraImporterTxt();
-            InputStreamResource inputStreamResource = (InputStreamResource) list.get(0);
-            file = inputStreamResource.getFile();
-            String fileName = (String) list.get(1);
+            String fileName = taskService.createFile(true);
+            InputStreamResource inputStreamResource = taskService.returnJiraImporterTxt();
             try {
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
                         .contentType(MediaType.TEXT_PLAIN)
-                        .contentLength(file.length())
+                        .contentLength(TaskServiceImpl.file.length())
                         .body(inputStreamResource);
             } finally {
-                file.delete();
+                TaskServiceImpl.file.delete();
             }
         }
         if (exportPlanningPoker) {
             log.debug("REST request to export planningPoker");
-            list = taskService.createPlanningPokerTxt();
-            InputStreamResource inputStreamResource = (InputStreamResource) list.get(0);
-            file = inputStreamResource.getFile();
-            String fileName = (String) list.get(1);
+            String fileName = taskService.createFile(false);
+            InputStreamResource inputStreamResource = taskService.returnPlanningPokerTxt();
             try {
                 return ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
                         .contentType(MediaType.TEXT_PLAIN)
-                        .contentLength(file.length())
+                        .contentLength(TaskServiceImpl.file.length())
                         .body(inputStreamResource);
             } finally {
-                file.delete();
+                TaskServiceImpl.file.delete();
             }
         }
         if (nomeTime.isPresent()) {
@@ -150,7 +144,7 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTask(@PathVariable Long id) throws BadRequestAlertException {
         log.debug("REST request to get Task : {}", id);
-        if(taskRepository.existsById(id)){
+        if (taskRepository.existsById(id)) {
             return ResponseEntity.ok(taskService.findOne(id).get());
         } else {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");

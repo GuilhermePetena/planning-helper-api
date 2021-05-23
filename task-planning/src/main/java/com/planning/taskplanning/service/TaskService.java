@@ -1,6 +1,7 @@
 package com.planning.taskplanning.service;
 
 import com.planning.taskplanning.model.Task;
+import org.springframework.core.io.InputStreamResource;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,10 +66,9 @@ public interface TaskService {
     /**
      * Download of the text files
      *
-     * @param jira flag to know if is jira file..
      * @return
      */
-    List<Object> downloadTextFile(boolean jira) throws IOException;
+    InputStreamResource downloadTextFile() throws IOException;
 
     /**
      * Create the text files
@@ -82,12 +82,12 @@ public interface TaskService {
      *
      * @return
      */
-    List<Object> createPlanningPokerTxt() throws IOException;
+    InputStreamResource returnPlanningPokerTxt() throws IOException;
 
     /**
      * Create the jiraImporter text file
      *
      * @return
      */
-    List<Object> createJiraImporterTxt() throws IOException;
+    InputStreamResource returnJiraImporterTxt() throws IOException;
 }
