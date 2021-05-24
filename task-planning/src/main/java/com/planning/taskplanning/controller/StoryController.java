@@ -1,6 +1,5 @@
 package com.planning.taskplanning.controller;
 
-import com.planning.taskplanning.controller.errors.BadRequestAlertException;
 import com.planning.taskplanning.model.Story;
 import com.planning.taskplanning.repository.StoryRepository;
 import com.planning.taskplanning.service.StoryService;
@@ -16,7 +15,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Controller of the story routes
+ * @Author Guilherme Maciel Petena
+ */
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/story")
@@ -30,6 +32,11 @@ public class StoryController {
 
     private final StoryRepository storyRepository;
 
+    /**
+     * Constructor
+     * @param storyService
+     * @param storyRepository
+     */
     public StoryController(StoryService storyService, StoryRepository storyRepository) {
         this.storyService = storyService;
         this.storyRepository = storyRepository;
@@ -43,10 +50,10 @@ public class StoryController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping
-    public ResponseEntity<Story> createStory(@RequestBody Story story) throws URISyntaxException, BadRequestAlertException {
+    public ResponseEntity<Story> createStory(@RequestBody Story story) throws URISyntaxException {
         log.debug("REST request to save Story : {}", story);
         if (story.getId() != null) {
-            throw new BadRequestAlertException("A new story cannot already have an ID", ENTITY_NAME, "idexists");
+            return ResponseEntity.badRequest().build();
         }
         Story result = storyService.save(story);
         return ResponseEntity
@@ -65,18 +72,17 @@ public class StoryController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Story> updateStory(@PathVariable(value = "id", required = false) final Long id, @RequestBody Story story)
-            throws URISyntaxException, BadRequestAlertException {
+    public ResponseEntity<Story> updateStory(@PathVariable(value = "id", required = false) final Long id, @RequestBody Story story) {
         log.debug("REST request to update Story : {}, {}", id, story);
         if (story.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            return ResponseEntity.notFound().build();
         }
         if (!Objects.equals(id, story.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            return ResponseEntity.badRequest().build();
         }
 
         if (!storyRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            return ResponseEntity.notFound().build();
         }
 
         Story result = storyService.save(story);
@@ -105,12 +111,12 @@ public class StoryController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the story, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Story> getStory(@PathVariable Long id) throws BadRequestAlertException {
+    public ResponseEntity<Story> getStory(@PathVariable Long id) {
         log.debug("REST request to get Story : {}", id);
         if (storyRepository.existsById(id)) {
             return ResponseEntity.ok(storyService.findOne(id).get());
         } else {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            return ResponseEntity.notFound().build();
         }
     }
 

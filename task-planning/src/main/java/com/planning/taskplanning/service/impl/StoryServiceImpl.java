@@ -15,6 +15,7 @@ import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link Story}.
+ * @Author Guilherme Maciel Petena
  */
 @Service
 @Transactional
@@ -27,37 +28,30 @@ public class StoryServiceImpl implements StoryService {
     @Autowired
     private TaskServiceImpl taskServiceImpl;
 
+    /**
+     * Constructor
+     * @param storyRepository
+     */
     public StoryServiceImpl(StoryRepository storyRepository) {
         this.storyRepository = storyRepository;
     }
 
+    /**
+     * save the story
+     * @param story the entity to save.
+     * @return
+     */
     @Override
     public Story save(Story story) {
         log.debug("Request to save Story : {}", story);
         return storyRepository.save(story);
     }
 
-    @Override
-    public Optional<Story> partialUpdate(Story story) {
-        log.debug("Request to partially update Story : {}", story);
-
-        return storyRepository
-                .findById(story.getId())
-                .map(
-                        existingStory -> {
-                            if (story.getTitle() != null) {
-                                existingStory.setTitle(story.getTitle());
-                            }
-                            if (story.getStoryNumber() != null) {
-                                existingStory.setStoryNumber(story.getStoryNumber());
-                            }
-
-                            return existingStory;
-                        }
-                )
-                .map(storyRepository::save);
-    }
-
+    /**
+     * find All stories
+     * @param pageable the pagination information.
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<Story> findAll(Pageable pageable) {
@@ -65,6 +59,11 @@ public class StoryServiceImpl implements StoryService {
         return storyRepository.findAll(pageable);
     }
 
+    /**
+     * find one story
+     * @param id the id of the entity.
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Story> findOne(Long id) {
@@ -72,6 +71,10 @@ public class StoryServiceImpl implements StoryService {
         return storyRepository.findById(id);
     }
 
+    /**
+     * delete story
+     * @param id the id of the entity.
+     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Story : {}", id);

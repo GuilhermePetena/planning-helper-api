@@ -20,14 +20,6 @@ public interface StoryService {
     Story save(Story story);
 
     /**
-     * Partially updates a story.
-     *
-     * @param story the entity to update partially.
-     * @return the persisted entity.
-     */
-    Optional<Story> partialUpdate(Story story);
-
-    /**
      * Get all the stories.
      *
      * @param pageable the pagination information.

@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Task - domain class
+ * @Author Guilherme Maciel Petena
+ */
+
 @Entity
 @Table(name = "task")
 public class Task implements Serializable {

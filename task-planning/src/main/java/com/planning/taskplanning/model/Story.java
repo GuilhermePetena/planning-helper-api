@@ -7,6 +7,11 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Story - domain class
+ * @Author Guilherme Maciel Petena
+ */
+
 @Entity
 @Table(name = "story")
 public class Story implements Serializable {
@@ -27,7 +32,6 @@ public class Story implements Serializable {
     @JsonIgnoreProperties(value = { "story" }, allowSetters = true)
     private Set<Task> tasks = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -98,8 +102,6 @@ public class Story implements Serializable {
         this.tasks = tasks;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -111,13 +113,6 @@ public class Story implements Serializable {
         return id != null && id.equals(((Story) o).id);
     }
 
-    @Override
-    public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
-    }
-
-    // prettier-ignore
     @Override
     public String toString() {
         return "Story{" +

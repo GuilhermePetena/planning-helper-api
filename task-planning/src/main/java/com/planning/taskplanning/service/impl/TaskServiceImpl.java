@@ -32,6 +32,10 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private StoryServiceImpl storyService;
 
+    /**
+     * Constructor
+     * @param taskRepository
+     */
     public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
@@ -39,9 +43,18 @@ public class TaskServiceImpl implements TaskService {
     private static String teamName;
     public static File file;
 
+    /**
+     * Add team name
+     * @param team
+     */
     @Override
     public void addTeamName(String team) { teamName = team; }
 
+    /**
+     * Save the task
+     * @param task the entity to save.
+     * @return
+     */
     @Override
     public Task save(Task task) {
         log.debug("Request to save Task : {}", task);
@@ -50,6 +63,10 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(task);
     }
 
+    /**
+     * Find all tasks
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Task> findAll() {
@@ -57,12 +74,22 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll();
     }
 
+    /**
+     * Find All stories by JiraNumber
+     * @param storyNumber the jira number information.
+     * @return
+     */
     @Override
     public List<Task> findAllByStoryNumber(String storyNumber) {
         log.debug("Request to get all Tasks of a story");
         return taskRepository.findAllByStory_storyNumber(storyNumber);
     }
 
+    /**
+     * Find one task
+     * @param id the id of the entity.
+     * @return
+     */
     @Override
     @Transactional(readOnly = true)
     public Optional<Task> findOne(Long id) {
@@ -70,28 +97,50 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findById(id);
     }
 
+    /**
+     * delete a task
+     * @param id the id of the entity.
+     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Task : {}", id);
         taskRepository.deleteById(id);
     }
 
+    /**
+     * delete All stories by jira number
+     * @param storyNumber the id of the entity.
+     */
     @Override
     public void deleteAllByStoryNumber(String storyNumber) {
         log.debug("Request to delete Task : {}", storyNumber);
         taskRepository.deleteAllByStory_storyNumber(storyNumber);
     }
 
+    /**
+     * return jiraImporter file
+     * @return
+     * @throws IOException
+     */
     @Override
     public InputStreamResource returnJiraImporterTxt() throws IOException {
         return downloadTextFile();
     }
 
+    /**
+     * return planningPoker file
+     * @return
+     * @throws IOException
+     */
     @Override
     public InputStreamResource returnPlanningPokerTxt() throws IOException {
         return downloadTextFile();
     }
 
+    /**
+     * Create jiraImporter file
+     * @return
+     */
     public File createJiraImporter() {
         int contador = 1;
         List<Task> list = taskRepository.findAll();
@@ -103,10 +152,19 @@ public class TaskServiceImpl implements TaskService {
         return new CsvUtils().escreverJiraImporter(list);
     }
 
+    /**
+     * Create planninPoker file
+     * @return
+     */
     public File createPlanningPoker() {
         return new CsvUtils().escreverPlanningPokerTxt(findAll());
     }
 
+    /**
+     * method to call the create methods file
+     * @param jira flag to know if is jira file..
+     * @return
+     */
     @Override
     public String createFile(boolean jira) {
         String fileName;
@@ -120,6 +178,11 @@ public class TaskServiceImpl implements TaskService {
         return fileName;
     }
 
+    /**
+     * method to do the download of the text file
+     * @return
+     * @throws IOException
+     */
     @Override
     public InputStreamResource downloadTextFile() throws IOException {
         FileInputStream fileInputStream = new FileInputStream(file);

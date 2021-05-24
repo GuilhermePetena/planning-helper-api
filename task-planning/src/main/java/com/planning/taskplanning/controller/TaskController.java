@@ -1,6 +1,5 @@
 package com.planning.taskplanning.controller;
 
-import com.planning.taskplanning.controller.errors.BadRequestAlertException;
 import com.planning.taskplanning.model.Task;
 import com.planning.taskplanning.repository.TaskRepository;
 import com.planning.taskplanning.service.TaskService;
@@ -19,6 +18,10 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Controller of the task routes
+ * @Author Guilherme Maciel Petena
+ */
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/task")
@@ -44,10 +47,10 @@ public class TaskController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) throws URISyntaxException, BadRequestAlertException {
+    public ResponseEntity<Task> createTask(@RequestBody Task task) throws URISyntaxException {
         log.debug("REST request to save Task : {}", task);
         if (task.getId() != null) {
-            throw new BadRequestAlertException("A new task cannot already have an ID", ENTITY_NAME, "idexists");
+            return ResponseEntity.notFound().build();
         }
         Task result = taskService.save(task);
         return ResponseEntity
@@ -66,17 +69,16 @@ public class TaskController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final Long id, @RequestBody Task task)
-            throws URISyntaxException, BadRequestAlertException {
+    public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final Long id, @RequestBody Task task) {
         log.debug("REST request to update Task : {}, {}", id, task);
         if (task.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            return ResponseEntity.badRequest().build();
         }
         if (!Objects.equals(id, task.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+            return ResponseEntity.badRequest().build();
         }
         if (!taskRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            return ResponseEntity.notFound().build();
         }
 
         Task result = taskService.save(task);
@@ -86,9 +88,13 @@ public class TaskController {
     }
 
     /**
-     * {@code GET  /tasks} : get all the tasks.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     * get all the tasks.
+     * @param exportJiraImporter
+     * @param exportPlanningPoker
+     * @param nomeTime
+     * @param jiraKey
+     * @return
+     * @throws IOException
      */
     @GetMapping()
     public ResponseEntity getAll(@RequestParam(required = false) boolean exportJiraImporter,
@@ -142,12 +148,12 @@ public class TaskController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable Long id) throws BadRequestAlertException {
+    public ResponseEntity<Task> getTask(@PathVariable Long id) {
         log.debug("REST request to get Task : {}", id);
         if (taskRepository.existsById(id)) {
             return ResponseEntity.ok(taskService.findOne(id).get());
         } else {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+            return ResponseEntity.notFound().build();
         }
     }
 
