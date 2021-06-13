@@ -4,7 +4,7 @@ import com.planning.taskplanning.model.Story;
 import com.planning.taskplanning.model.Task;
 import com.planning.taskplanning.repository.TaskRepository;
 import com.planning.taskplanning.service.TaskService;
-import com.planning.taskplanning.utils.CsvUtils;
+import com.planning.taskplanning.utils.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +92,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Task> findOne(Long id) {
+    public Optional<Task> findOne(String id) {
         log.debug("Request to get Task : {}", id);
         return taskRepository.findById(id);
     }
@@ -102,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
      * @param id the id of the entity.
      */
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         log.debug("Request to delete Task : {}", id);
         taskRepository.deleteById(id);
     }
@@ -124,6 +124,12 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public InputStreamResource returnJiraImporterTxt() throws IOException {
+        return downloadTextFile();
+    }
+
+    @Override
+    public InputStreamResource returnParametrizationFile() throws IOException {
+        file = new FileUtils().returnParametrizationFile();
         return downloadTextFile();
     }
 
@@ -149,7 +155,7 @@ public class TaskServiceImpl implements TaskService {
             task.setIssueId(contador++);
             task.setOriginalEstimate(task.getHours() * 3600);
         }
-        return new CsvUtils().escreverJiraImporter(list);
+        return new FileUtils().writeJiraImporter(list);
     }
 
     /**
@@ -157,7 +163,7 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     public File createPlanningPoker() {
-        return new CsvUtils().escreverPlanningPokerTxt(findAll());
+        return new FileUtils().writePlanningPokerTxt(findAll());
     }
 
     /**

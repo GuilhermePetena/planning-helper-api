@@ -5,8 +5,6 @@ import com.planning.taskplanning.repository.StoryRepository;
 import com.planning.taskplanning.service.StoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +24,6 @@ public class StoryController {
 
     private final Logger log = LoggerFactory.getLogger(StoryController.class);
 
-    private static final String ENTITY_NAME = "planningAppStory";
 
     private final StoryService storyService;
 
@@ -43,7 +40,7 @@ public class StoryController {
     }
 
     /**
-     * {@code POST  /stories} : Create a new story.
+     * {@code POST  /story} : Create a new story.
      *
      * @param story the story to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new story, or with status {@code 400 (Bad Request)} if the story has already an ID.
@@ -52,7 +49,7 @@ public class StoryController {
     @PostMapping
     public ResponseEntity<Story> createStory(@RequestBody Story story) throws URISyntaxException {
         log.debug("REST request to save Story : {}", story);
-        if (story.getId() != null) {
+        if (Objects.isNull(story.getId())) {
             return ResponseEntity.badRequest().build();
         }
         Story result = storyService.save(story);
@@ -62,7 +59,7 @@ public class StoryController {
     }
 
     /**
-     * {@code PUT  /stories/:id} : Updates an existing story.
+     * {@code PUT  /story/:id} : Updates an existing story.
      *
      * @param id    the id of the story to save.
      * @param story the story to update.
@@ -72,9 +69,9 @@ public class StoryController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Story> updateStory(@PathVariable(value = "id", required = false) final Long id, @RequestBody Story story) {
+    public ResponseEntity<Story> updateStory(@PathVariable(value = "id", required = false) final String id, @RequestBody Story story) {
         log.debug("REST request to update Story : {}, {}", id, story);
-        if (story.getId() == null) {
+        if (Objects.isNull(story.getId())) {
             return ResponseEntity.notFound().build();
         }
         if (!Objects.equals(id, story.getId())) {
@@ -92,26 +89,25 @@ public class StoryController {
     }
 
     /**
-     * {@code GET  /stories} : get all the stories.
+     * {@code GET  /story} : get all the stories.
      *
-     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of stories in body.
      */
     @GetMapping
-    public ResponseEntity<List<Story>> getAllStories(Pageable pageable) {
+    public ResponseEntity<List<Story>> getAllStories() {
         log.debug("REST request to get a page of Stories");
-        Page<Story> page = storyService.findAll(pageable);
-        return ResponseEntity.ok().body(page.getContent());
+        List<Story> list = storyService.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
     /**
-     * {@code GET  /stories/:id} : get the "id" story.
+     * {@code GET  /story/:id} : get the "id" story.
      *
      * @param id the id of the story to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the story, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Story> getStory(@PathVariable Long id) {
+    public ResponseEntity<Story> getStory(@PathVariable String id) {
         log.debug("REST request to get Story : {}", id);
         if (storyRepository.existsById(id)) {
             return ResponseEntity.ok(storyService.findOne(id).get());
@@ -121,13 +117,13 @@ public class StoryController {
     }
 
     /**
-     * {@code DELETE  /stories/:id} : delete the "id" story.
+     * {@code DELETE  /story/:id} : delete the "id" story.
      *
      * @param id the id of the story to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStory(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStory(@PathVariable String id) {
         log.debug("REST request to delete Story : {}", id);
         storyService.delete(id);
         return ResponseEntity

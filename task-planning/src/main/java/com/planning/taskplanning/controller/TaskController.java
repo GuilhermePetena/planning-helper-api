@@ -28,7 +28,6 @@ import java.util.Optional;
 public class TaskController {
     private final Logger log = LoggerFactory.getLogger(TaskController.class);
 
-    private static final String ENTITY_NAME = "planningAppTask";
 
     private final TaskService taskService;
 
@@ -49,7 +48,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<Task> createTask(@RequestBody Task task) throws URISyntaxException {
         log.debug("REST request to save Task : {}", task);
-        if (task.getId() != null) {
+        if (Objects.isNull(task.getId())) {
             return ResponseEntity.notFound().build();
         }
         Task result = taskService.save(task);
@@ -69,7 +68,7 @@ public class TaskController {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final Long id, @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final String id, @RequestBody Task task) {
         log.debug("REST request to update Task : {}, {}", id, task);
         if (task.getId() == null) {
             return ResponseEntity.badRequest().build();
@@ -99,6 +98,7 @@ public class TaskController {
     @GetMapping()
     public ResponseEntity getAll(@RequestParam(required = false) boolean exportJiraImporter,
                                  @RequestParam(required = false) boolean exportPlanningPoker,
+                                 @RequestParam(required = false) boolean exportParameterizationFile,
                                  @RequestParam(required = false) Optional<String> nomeTime,
                                  @RequestParam(required = false) Optional<String> jiraKey) throws IOException {
         if (exportJiraImporter) {
@@ -129,6 +129,15 @@ public class TaskController {
                 TaskServiceImpl.file.delete();
             }
         }
+        if(exportParameterizationFile) {
+            log.debug("REST request to export parametrization file");
+            InputStreamResource inputStreamResource = taskService.returnParametrizationFile();
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=ArquivoParametrizacao")
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .contentLength(TaskServiceImpl.file.length())
+                    .body(inputStreamResource);
+        }
         if (nomeTime.isPresent()) {
             log.debug("REST request to add teamName");
             taskService.addTeamName(nomeTime.get());
@@ -148,7 +157,7 @@ public class TaskController {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable Long id) {
+    public ResponseEntity<Task> getTask(@PathVariable String id) {
         log.debug("REST request to get Task : {}", id);
         if (taskRepository.existsById(id)) {
             return ResponseEntity.ok(taskService.findOne(id).get());
@@ -164,7 +173,7 @@ public class TaskController {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTask(@PathVariable String id) {
         log.debug("REST request to delete Task : {}", id);
         taskService.delete(id);
         return ResponseEntity

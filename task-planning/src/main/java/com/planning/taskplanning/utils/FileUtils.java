@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CsvUtils {
-    public File escreverJiraImporter(List<Task> tasks) {
+public class FileUtils {
+        public File writeJiraImporter(List<Task> tasks) {
 
         try {
             File file = new File("src/main/resources/jiraImporter.txt");
@@ -39,7 +39,7 @@ public class CsvUtils {
         return null;
     }
 
-    public File escreverPlanningPokerTxt(List<Task> tasks) {
+    public File writePlanningPokerTxt(List<Task> tasks) {
 
         try {
             File file = new File("src/main/resources/planningpoker.txt");
@@ -49,7 +49,7 @@ public class CsvUtils {
             List<String[]> linhas = new ArrayList<>();
 
             for (Task task : tasks) {
-                linhas.add(new String[]{task.getSummary()});
+                linhas.add(new String[]{task.getStory().getStoryNumber(), " = ", task.getSummary()});
             }
 
             csvWriter.writeAll(linhas);
@@ -61,5 +61,9 @@ public class CsvUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public File returnParametrizationFile() {
+            return new File("src/main/resources/ArquivoParametrizacao.txt");
     }
 }

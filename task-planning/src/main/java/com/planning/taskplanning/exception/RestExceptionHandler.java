@@ -24,10 +24,10 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class RestExceptionHandler {
     private static final String UNEXPECTED_ERROR = "Um erro inesperado aconteceu!";
-    private static final String RESOURCE_NOT_FOUND = "Recurso não encontrado!";
-    private static final String INVALID_JSON = "Json inválido!";
-    private static final String METHOD_NOT_SUPPORTED = "Metódo não suportado!";
-    private static final String INVALID_ARGUMENTS    = "Argumentos inválidos";
+    private static final String RESOURCE_NOT_FOUND = "Recurso nao encontrado!";
+    private static final String INVALID_JSON = "Json invalido!";
+    private static final String METHOD_NOT_SUPPORTED = "Metodo nao suportado!";
+    private static final String INVALID_ARGUMENTS    = "Argumentos invalidos";
 
     /**
      * HandleException for unexpected error

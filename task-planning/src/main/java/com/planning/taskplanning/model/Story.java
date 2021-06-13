@@ -6,21 +6,21 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Story - domain class
+ *
  * @Author Guilherme Maciel Petena
  */
 
 @Entity
-@Table(name = "story")
 public class Story implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id = UUID.randomUUID().toString();
 
     @Column(name = "title")
     private String title;
@@ -28,19 +28,25 @@ public class Story implements Serializable {
     @Column(name = "story_number")
     private String storyNumber;
 
-    @OneToMany(mappedBy = "story")
-    @JsonIgnoreProperties(value = { "story" }, allowSetters = true)
+    @ManyToOne
+    private User user;
+
+    @OneToMany
+    @JsonIgnoreProperties(value = {"story"}, allowSetters = true)
     private Set<Task> tasks = new HashSet<>();
 
-    public Long getId() {
+    public Story() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Story id(Long id) {
+    public Story id(String id) {
         this.id = id;
         return this;
     }
@@ -78,6 +84,14 @@ public class Story implements Serializable {
     public Story tasks(Set<Task> tasks) {
         this.setTasks(tasks);
         return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Story addTask(Task task) {

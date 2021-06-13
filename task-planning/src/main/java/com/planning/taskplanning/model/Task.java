@@ -4,21 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Task - domain class
- * @Author Guilherme Maciel Petena
+ * @author Guilherme Maciel Petena
  */
 
 @Entity
-@Table(name = "task")
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id = UUID.randomUUID().toString();
 
     @Column(name = "issue_type")
     private String issueType;
@@ -66,16 +65,18 @@ public class Task implements Serializable {
     @JsonIgnoreProperties(value = { "tasks" }, allowSetters = true)
     private Story story;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-    public Long getId() {
+    public Task() {
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Task id(Long id) {
+    public Task id(String id) {
         this.id = id;
         return this;
     }

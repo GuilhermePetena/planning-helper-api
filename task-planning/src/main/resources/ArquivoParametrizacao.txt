@@ -1,0 +1,61 @@
+{
+  "config.version": "2.0",
+  "config.project.from.csv": "false",
+  "config.encoding": "windows-1258",
+  "config.email.suffix": "@",
+  "config.field.mappings": {
+    "Corrigir versões": {
+      "jira.field": "fixVersions"
+    },
+    "Descrição" : {
+      "jira.field": "descrição"
+    },
+    "Prioridade" : {
+      "jira.field": "prioridade"
+    },
+    "Pontos de Complexidade": {
+      "existing.custom.field": "16600"
+    },
+    "Etiquetas": {
+      "jira.field": "rótulos"
+    },
+    "Link épico": {
+      "existing.custom.field": "10001"
+    },
+    "Componentes": {
+      "jira.field": "componentes"
+    },
+    "Tipo de problema" : {
+      "jira.field": "issuetype"
+    },
+    "Resumo" : {
+      "jira.field": "resumo"
+    },
+    "Equipe" : {
+      "existing.custom.field": "16625"
+    },
+    "IssueID": {
+      "jira.field": "id-problema"
+    },
+    "ID pai / chave Jira": {
+      "jira.field": "subtask-parent-id"
+    },
+    "Estimativa original" : {
+      "jira.field": "timeoriginalestimate"
+    },
+    "Data de vencimento" : {
+      "jira.field": "duedate"
+    }
+  },
+  "config.value.mappings": {},
+  "config.delimiter": "\ t",
+  "config.project": {
+    "project.type": null,
+    "project.key": "CSEGNPCAT",
+    "project.description": null,
+    "project.url": nulo,
+    "project.name": "SQUAD 'Nova Plataforma - Atendimento",
+    "líder de projeto" : ""
+  },
+  "config.date.format": "EEEE dd / MM / aa h: mm a"
+}
