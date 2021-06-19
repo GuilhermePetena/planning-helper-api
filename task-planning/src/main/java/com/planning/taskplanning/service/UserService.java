@@ -22,6 +22,4 @@ public interface UserService {
 
     List<UserDTO> converteToDTOList(List<User> user);
 
-    boolean forgotPassword(User user);
-
 }

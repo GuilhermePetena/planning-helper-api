@@ -4,15 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-/**
- * Story - domain class
- *
- * @Author Guilherme Maciel Petena
- */
+import java.util.*;
 
 @Entity
 public class Story implements Serializable {
@@ -33,7 +25,7 @@ public class Story implements Serializable {
 
     @OneToMany
     @JsonIgnoreProperties(value = {"story"}, allowSetters = true)
-    private Set<Task> tasks = new HashSet<>();
+    private List<Task> tasks = new ArrayList<>();
 
     public Story() {
     }
@@ -77,13 +69,12 @@ public class Story implements Serializable {
         this.storyNumber = storyNumber;
     }
 
-    public Set<Task> getTasks() {
-        return this.tasks;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public Story tasks(Set<Task> tasks) {
-        this.setTasks(tasks);
-        return this;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public User getUser() {
@@ -92,28 +83,6 @@ public class Story implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Story addTask(Task task) {
-        this.tasks.add(task);
-        task.setStory(this);
-        return this;
-    }
-
-    public Story removeTask(Task task) {
-        this.tasks.remove(task);
-        task.setStory(null);
-        return this;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-        if (this.tasks != null) {
-            this.tasks.forEach(i -> i.setStory(null));
-        }
-        if (tasks != null) {
-            tasks.forEach(i -> i.setStory(this));
-        }
-        this.tasks = tasks;
     }
 
     @Override

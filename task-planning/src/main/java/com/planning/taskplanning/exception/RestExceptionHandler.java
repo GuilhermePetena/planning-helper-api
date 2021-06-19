@@ -17,10 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * RestExceptionHandler
- * @Author Guilherme Maciel Petena
- */
 @RestControllerAdvice
 public class RestExceptionHandler {
     private static final String UNEXPECTED_ERROR = "Um erro inesperado aconteceu!";
@@ -29,60 +25,30 @@ public class RestExceptionHandler {
     private static final String METHOD_NOT_SUPPORTED = "Metodo nao suportado!";
     private static final String INVALID_ARGUMENTS    = "Argumentos invalidos";
 
-    /**
-     * HandleException for unexpected error
-     * @param httpServletRequest
-     * @param exception
-     * @return
-     */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseException handleException(HttpServletRequest httpServletRequest, Exception exception){
         return new ResponseException(httpServletRequest,UNEXPECTED_ERROR, exception.getMessage());
     }
 
-    /**
-     * When the resource is not found
-     * @param httpServletRequest
-     * @param exception
-     * @return
-     */
     @ExceptionHandler({NoSuchElementException.class, EmptyResultDataAccessException.class, NoHandlerFoundException.class})
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseException notFoundException(HttpServletRequest httpServletRequest, Exception exception){
         return new ResponseException(httpServletRequest,RESOURCE_NOT_FOUND, exception.getMessage());
     }
 
-    /**
-     * Bad request for invalid json
-     * @param httpServletRequest
-     * @param exception
-     * @return
-     */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseException badRequestException(HttpServletRequest httpServletRequest, HttpMessageNotReadableException exception){
         return new ResponseException(httpServletRequest,INVALID_JSON, exception.getMessage());
     }
 
-    /**
-     * Bad request for method not supported
-     * @param httpServletRequest
-     * @param exception
-     * @return
-     */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseException badRequestException(HttpServletRequest httpServletRequest, HttpRequestMethodNotSupportedException exception){
         return new ResponseException(httpServletRequest,METHOD_NOT_SUPPORTED, exception.getMessage());
     }
 
-    /**
-     * Bad request for invalid arguments
-     * @param request
-     * @param exception
-     * @return
-     */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseException badRequestException(HttpServletRequest request, MethodArgumentNotValidException exception) {
@@ -94,7 +60,6 @@ public class RestExceptionHandler {
         for (FieldError fieldError : errors) {
             detail.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-
         return new ResponseException(request, INVALID_ARGUMENTS, detail);
     }
 

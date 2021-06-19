@@ -12,4 +12,6 @@ public interface TaskRepository extends JpaRepository<Task, String> {
   void deleteAllByStory_storyNumber(String jiraKey);
 
   List<Task> findAllByStory_storyNumber(String jiraKey);
+
+  List<Task> findAllByStory_User_id(String id);
 }

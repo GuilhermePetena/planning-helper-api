@@ -3,25 +3,16 @@ package com.planning.taskplanning.controller;
 import com.planning.taskplanning.model.Task;
 import com.planning.taskplanning.repository.TaskRepository;
 import com.planning.taskplanning.service.TaskService;
-import com.planning.taskplanning.service.impl.TaskServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Controller of the task routes
- * @Author Guilherme Maciel Petena
- */
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/task")
@@ -38,37 +29,21 @@ public class TaskController {
         this.taskRepository = taskRepository;
     }
 
-    /**
-     * {@code POST  /tasks} : Create a new task.
-     *
-     * @param task the task to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new task, or with status {@code 400 (Bad Request)} if the task has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody Task task) throws URISyntaxException {
-        log.debug("REST request to save Task : {}", task);
-        if (Objects.isNull(task.getId())) {
+    public ResponseEntity<?> createTask(@RequestBody(required = false) Task task) throws URISyntaxException {
+        log.debug("REST request to save Task: {}", task);
+        if (Objects.nonNull(task)) {
+            Task result = taskService.save(task);
+            return ResponseEntity
+                    .created(new URI("/api/tasks/" + result.getId()))
+                    .body(taskService.converteToDTO(result));
+        } else {
             return ResponseEntity.notFound().build();
         }
-        Task result = taskService.save(task);
-        return ResponseEntity
-                .created(new URI("/api/tasks/" + result.getId()))
-                .body(result);
     }
 
-    /**
-     * {@code PUT  /tasks/:id} : Updates an existing task.
-     *
-     * @param id   the id of the task to save.
-     * @param task the task to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated task,
-     * or with status {@code 400 (Bad Request)} if the task is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final String id, @RequestBody Task task) {
+    public ResponseEntity<?> updateTask(@PathVariable(value = "id", required = false) final String id, @RequestBody Task task) {
         log.debug("REST request to update Task : {}, {}", id, task);
         if (task.getId() == null) {
             return ResponseEntity.badRequest().build();
@@ -83,95 +58,30 @@ public class TaskController {
         Task result = taskService.save(task);
         return ResponseEntity
                 .ok()
-                .body(result);
+                .body(taskService.converteToDTO(result));
     }
 
-    /**
-     * get all the tasks.
-     * @param exportJiraImporter
-     * @param exportPlanningPoker
-     * @param nomeTime
-     * @param jiraKey
-     * @return
-     * @throws IOException
-     */
     @GetMapping()
-    public ResponseEntity getAll(@RequestParam(required = false) boolean exportJiraImporter,
-                                 @RequestParam(required = false) boolean exportPlanningPoker,
-                                 @RequestParam(required = false) boolean exportParameterizationFile,
-                                 @RequestParam(required = false) Optional<String> nomeTime,
-                                 @RequestParam(required = false) Optional<String> jiraKey) throws IOException {
-        if (exportJiraImporter) {
-            log.debug("REST request to export jiraImporter");
-            String fileName = taskService.createFile(true);
-            InputStreamResource inputStreamResource = taskService.returnJiraImporterTxt();
-            try {
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .contentLength(TaskServiceImpl.file.length())
-                        .body(inputStreamResource);
-            } finally {
-                TaskServiceImpl.file.delete();
-            }
-        }
-        if (exportPlanningPoker) {
-            log.debug("REST request to export planningPoker");
-            String fileName = taskService.createFile(false);
-            InputStreamResource inputStreamResource = taskService.returnPlanningPokerTxt();
-            try {
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName)
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .contentLength(TaskServiceImpl.file.length())
-                        .body(inputStreamResource);
-            } finally {
-                TaskServiceImpl.file.delete();
-            }
-        }
-        if(exportParameterizationFile) {
-            log.debug("REST request to export parametrization file");
-            InputStreamResource inputStreamResource = taskService.returnParametrizationFile();
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=ArquivoParametrizacao")
-                    .contentType(MediaType.TEXT_PLAIN)
-                    .contentLength(TaskServiceImpl.file.length())
-                    .body(inputStreamResource);
-        }
-        if (nomeTime.isPresent()) {
-            log.debug("REST request to add teamName");
-            taskService.addTeamName(nomeTime.get());
-            return ResponseEntity.ok().build();
-        }
+    public ResponseEntity getAll(@RequestParam(required = false) Optional<String> jiraKey, @RequestParam(required = false) Optional<String> id) {
+        log.debug("REST request to get task of a story", jiraKey, id);
         if (jiraKey.isPresent()) {
-            log.debug("REST request to get task of a story");
-            return ResponseEntity.ok(taskService.findAllByStoryNumber(jiraKey.get()));
+            return ResponseEntity.ok(taskService.converteToDTOList(taskService.findAllByStoryNumber(jiraKey.get())));
+        }if (id.isPresent()){
+            return ResponseEntity.ok(taskService.converteToDTOList(taskService.findAllByUserId(id.get())));
         }
-        return ResponseEntity.ok(taskService.findAll());
+        return ResponseEntity.badRequest().build();
     }
 
-    /**
-     * {@code GET  /tasks/:id} : get the "id" task.
-     *
-     * @param id the id of the task to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable String id) {
+    public ResponseEntity<?> getTask(@PathVariable String id) {
         log.debug("REST request to get Task : {}", id);
         if (taskRepository.existsById(id)) {
-            return ResponseEntity.ok(taskService.findOne(id).get());
+            return ResponseEntity.ok(taskService.converteToDTO(taskService.findOne(id).get()));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
-    /**
-     * {@code DELETE  /tasks/:id} : delete the "id" task.
-     *
-     * @param id the id of the task to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable String id) {
         log.debug("REST request to delete Task : {}", id);

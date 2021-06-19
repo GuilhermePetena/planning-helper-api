@@ -1,28 +1,14 @@
 version: "3.7"
-services:
-#  postgresql:
-#    image: "postgres:latest"
-#    container_name: postgres
-#    environment:
-#      POSTGRES_PASSWORD: root
-#      POSTGRES_USER: root
-#    ports:
-#      - 27017:27017
   planning-api:
     image: planning-api
-    container_name: planning-api
+    container_name: planning-ap
     restart: on-failure
     ports:
       - 8080:8080
       - 5005:5005
-#    links:
-#      - postgres
     build:
       context: "./"
       dockerfile: "Dockerfile"
     environment:
       ADDITIONAL_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xmx256m -Xms128m -XX:MaxMetaspaceSize=128m
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:27017/planning
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: root
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+

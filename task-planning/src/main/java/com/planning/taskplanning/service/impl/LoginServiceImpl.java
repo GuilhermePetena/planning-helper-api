@@ -4,6 +4,7 @@ import com.planning.taskplanning.config.security.Login;
 import com.planning.taskplanning.config.security.TokenUtil;
 import com.planning.taskplanning.model.Token;
 import com.planning.taskplanning.model.User;
+import com.planning.taskplanning.repository.UserRepository;
 import com.planning.taskplanning.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,8 @@ public class LoginServiceImpl implements LoginService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenUtil tokenUtil;
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Token authenticate(Login login) {
@@ -25,5 +28,11 @@ public class LoginServiceImpl implements LoginService {
             Authentication authentication = authenticationManager.authenticate(loginData);
             String token = tokenUtil.tokenGenerate(authentication);
             return new Token(token, "Bearer");
+    }
+
+    @Override
+    public User forgotPassword(String question, String answer) {
+        User user = userRepository.findByQuestionAndAnswer(question, answer).get();
+        return user;
     }
 }

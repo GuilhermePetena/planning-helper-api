@@ -6,11 +6,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * Task - domain class
- * @author Guilherme Maciel Petena
- */
-
 @Entity
 public class Task implements Serializable {
 

@@ -1,18 +1,16 @@
 package com.planning.taskplanning.service;
 
 import com.planning.taskplanning.model.Task;
-import org.springframework.core.io.InputStreamResource;
+import com.planning.taskplanning.model.dto.TaskDTO;
+import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service
 public interface TaskService {
 
     Task save(Task task);
-
-    void addTeamName(String teamName);
 
     List<Task> findAll();
 
@@ -24,13 +22,10 @@ public interface TaskService {
 
     void deleteAllByStoryNumber(String storyNumber);
 
-    InputStreamResource downloadTextFile() throws IOException;
+    List<Task> findAllByUserId(String id);
 
-    String createFile(boolean jira) throws IOException;
+    TaskDTO converteToDTO(Task task);
 
-    InputStreamResource returnPlanningPokerTxt() throws IOException;
+    List<TaskDTO> converteToDTOList(List<Task> tasks);
 
-    InputStreamResource returnJiraImporterTxt() throws IOException;
-
-    InputStreamResource returnParametrizationFile() throws IOException;
 }

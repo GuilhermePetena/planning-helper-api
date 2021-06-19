@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -29,21 +30,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User user, @RequestParam(required = false) boolean expand) throws URISyntaxException {
+    public ResponseEntity<?> createUser(@RequestBody User user) throws URISyntaxException {
         log.debug("REST request to save Story : {}", user);
         if (Objects.isNull(user.getId()) || userRepository.existsById(user.getId())) {
             return ResponseEntity.badRequest().build();
         }
         User result = userService.save(user);
-        if (expand) {
-            return ResponseEntity
-                    .created(new URI("/user/" + result.getId()))
-                    .body(result);
-        } else {
             return ResponseEntity
                     .created(new URI("/user/" + result.getId()))
                     .body(userService.converteToDTO(result));
-        }
     }
 
     @PutMapping("/{id}")
@@ -64,6 +59,24 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .body(userService.converteToDTO(result));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updatePatchUser(@PathVariable(value = "id", required = false) final String id, @RequestBody Map<String, String> password, @RequestParam(required = false) boolean expand) {
+        log.debug("REST request to update User : {}, {}", id);
+        if (id == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!userRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User userResult = userService.findOne(id).get();
+        userResult.setPassword(password.get("password"));
+        userService.save(userResult);
+        return ResponseEntity
+                .ok()
+                .body(userService.converteToDTO(userResult));
     }
 
     @GetMapping
@@ -88,15 +101,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/forgot")
-    public ResponseEntity<?> forgotPassword(@RequestBody User user) {
-        log.debug("REST request when the user forget the password : {}", user);
-        if(Objects.isNull(userService.forgotPassword(user))){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         log.debug("REST request to delete User : {}", id);

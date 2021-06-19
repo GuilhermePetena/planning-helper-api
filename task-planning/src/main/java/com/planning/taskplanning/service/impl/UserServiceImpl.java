@@ -70,13 +70,4 @@ public class UserServiceImpl implements UserService {
         }
         return dtoList;
     }
-
-    @Override
-    public boolean forgotPassword(User user) {
-        user = userRepository.findByQuestionAndAnswer(user.getQuestion(), user.getAnswer()).get();
-        if (Objects.isNull(user)) {
-            return false;
-        }
-        return true;
-    }
 }

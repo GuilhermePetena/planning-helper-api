@@ -10,10 +10,6 @@ import javax.persistence.Id;
 import java.util.Collection;
 import java.util.UUID;
 
-/**
- * User - domain class
- * @author Guilherme Maciel Petena
- */
 @Entity
 public class User implements UserDetails {
 

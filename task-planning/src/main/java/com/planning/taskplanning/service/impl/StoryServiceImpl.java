@@ -2,21 +2,19 @@ package com.planning.taskplanning.service.impl;
 
 import com.planning.taskplanning.model.Story;
 import com.planning.taskplanning.model.User;
+import com.planning.taskplanning.model.dto.StoryDTO;
 import com.planning.taskplanning.repository.StoryRepository;
 import com.planning.taskplanning.service.StoryService;
+import com.planning.taskplanning.service.TaskService;
+import com.planning.taskplanning.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-/**
- * Service Implementation for managing {@link Story}.
- * @Author Guilherme Maciel Petena
- */
 @Service
 @Transactional
 public class StoryServiceImpl implements StoryService {
@@ -26,10 +24,10 @@ public class StoryServiceImpl implements StoryService {
     private final StoryRepository storyRepository;
 
     @Autowired
-    private TaskServiceImpl taskServiceImpl;
+    private TaskService taskService;
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     /**
      * Constructor
@@ -52,10 +50,6 @@ public class StoryServiceImpl implements StoryService {
         return storyRepository.save(story);
     }
 
-    /**
-     * find All stories
-     * @return
-     */
     @Override
     @Transactional(readOnly = true)
     public List<Story> findAll() {
@@ -63,11 +57,12 @@ public class StoryServiceImpl implements StoryService {
         return storyRepository.findAll();
     }
 
-    /**
-     * find one story
-     * @param id the id of the entity.
-     * @return
-     */
+    @Override
+    public List<Story> findAllByUserId(String id) {
+        log.debug("Request to get all Stories by id");
+        return storyRepository.findAllByUser_Id(id);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Story> findOne(String id) {
@@ -75,14 +70,32 @@ public class StoryServiceImpl implements StoryService {
         return storyRepository.findById(id);
     }
 
-    /**
-     * delete story
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(String id) {
         log.debug("Request to delete Story : {}", id);
-        taskServiceImpl.deleteAllByStoryNumber(findOne(id).get().getStoryNumber());
+        taskService.deleteAllByStoryNumber(findOne(id).get().getStoryNumber());
         storyRepository.deleteById(id);
+    }
+
+    @Override
+    public StoryDTO converteToDTO(Story story) {
+        log.debug("Convert object to DTO");
+        StoryDTO storyDTO = new StoryDTO();
+        storyDTO.setId(story.getId());
+        storyDTO.setStoryNumber(story.getStoryNumber());
+        storyDTO.setUser(userService.converteToDTO(story.getUser()));
+        storyDTO.setTitle(story.getTitle());
+        storyDTO.setTask(taskService.converteToDTOList(story.getTasks()));
+        return storyDTO;
+    }
+
+    @Override
+    public List<StoryDTO> converteToDTOList(List<Story> stories) {
+        log.debug("Convert object to DTO");
+        List<StoryDTO> dtoList = new ArrayList<>();
+        for (Story story : stories) {
+            dtoList.add(converteToDTO(story));
+        }
+        return dtoList;
     }
 }
