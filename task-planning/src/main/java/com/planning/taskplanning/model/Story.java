@@ -25,9 +25,17 @@ public class Story implements Serializable {
 
     @OneToMany
     @JsonIgnoreProperties(value = {"story"}, allowSetters = true)
-    private List<Task> tasks = new ArrayList<>();
+    private List<Task> task = new ArrayList<>();
 
     public Story() {
+    }
+
+    public Story(String id, String title, String storyNumber, User user, List<Task> tasks) {
+        this.id = id;
+        this.title = title;
+        this.storyNumber = storyNumber;
+        this.user = user;
+        this.task = tasks;
     }
 
     public String getId() {
@@ -70,11 +78,11 @@ public class Story implements Serializable {
     }
 
     public List<Task> getTasks() {
-        return tasks;
+        return task;
     }
 
     public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+        this.task = tasks;
     }
 
     public User getUser() {
@@ -99,10 +107,12 @@ public class Story implements Serializable {
     @Override
     public String toString() {
         return "Story{" +
-                "id=" + getId() +
-                ", title='" + getTitle() + "'" +
-                ", storyNumber='" + getStoryNumber() + "'" +
-                "}";
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", storyNumber='" + storyNumber + '\'' +
+                ", user=" + user +
+                ", task=" + task +
+                '}';
     }
 }
 

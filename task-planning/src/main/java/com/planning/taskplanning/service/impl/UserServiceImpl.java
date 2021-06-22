@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,14 +19,11 @@ public class UserServiceImpl implements UserService {
 
     private final Logger log = LoggerFactory.getLogger(StoryServiceImpl.class);
 
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder encoder;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private PasswordEncoder encoder;
 
     @Override
     public User save(User user) {

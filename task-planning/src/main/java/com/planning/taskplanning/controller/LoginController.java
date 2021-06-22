@@ -17,7 +17,7 @@ import java.util.Objects;
 @RestController
 public class LoginController {
 
-    private final Logger log = LoggerFactory.getLogger(StoryController.class);
+    private final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private LoginService loginService;

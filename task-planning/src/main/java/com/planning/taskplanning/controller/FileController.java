@@ -20,7 +20,7 @@ import java.util.Objects;
 @RequestMapping("/file")
 public class FileController {
 
-    private final Logger log = LoggerFactory.getLogger(TaskController.class);
+    private final Logger log = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileService fileService;

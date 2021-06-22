@@ -1,6 +1,7 @@
 package com.planning.taskplanning.model.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class StoryDTO {
 
@@ -59,5 +60,18 @@ public class StoryDTO {
 
     public void setTask(List<TaskDTO> task) {
         this.task = task;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StoryDTO storyDTO = (StoryDTO) o;
+        return Objects.equals(id, storyDTO.id) && Objects.equals(title, storyDTO.title) && Objects.equals(storyNumber, storyDTO.storyNumber) && Objects.equals(user, storyDTO.user) && Objects.equals(task, storyDTO.task);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, storyNumber, user, task);
     }
 }

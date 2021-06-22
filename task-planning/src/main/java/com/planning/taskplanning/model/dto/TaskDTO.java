@@ -1,5 +1,7 @@
 package com.planning.taskplanning.model.dto;
 
+import java.util.Objects;
+
 public class TaskDTO {
 
     private String id;
@@ -148,5 +150,18 @@ public class TaskDTO {
 
     public void setStory(StoryDTO story) {
         this.story = story;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskDTO taskDTO = (TaskDTO) o;
+        return Objects.equals(id, taskDTO.id) && Objects.equals(issueType, taskDTO.issueType) && Objects.equals(description, taskDTO.description) && Objects.equals(summary, taskDTO.summary) && Objects.equals(hours, taskDTO.hours) && Objects.equals(issueId, taskDTO.issueId) && Objects.equals(epicLink, taskDTO.epicLink) && Objects.equals(complexityPoints, taskDTO.complexityPoints) && Objects.equals(priority, taskDTO.priority) && Objects.equals(components, taskDTO.components) && Objects.equals(fixVersions, taskDTO.fixVersions) && Objects.equals(labels, taskDTO.labels) && Objects.equals(dueDate, taskDTO.dueDate) && Objects.equals(team, taskDTO.team) && Objects.equals(originalEstimate, taskDTO.originalEstimate) && Objects.equals(story, taskDTO.story);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, issueType, description, summary, hours, issueId, epicLink, complexityPoints, priority, components, fixVersions, labels, dueDate, team, originalEstimate, story);
     }
 }

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +30,14 @@ public class User implements UserDetails {
     private String answer;
 
     public User() {
+    }
+
+    public User(String id, String email, String password, String question, String answer) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.question = question;
+        this.answer = answer;
     }
 
     public String getId() {
@@ -105,5 +114,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(question, user.question) && Objects.equals(answer, user.answer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, question, answer);
     }
 }

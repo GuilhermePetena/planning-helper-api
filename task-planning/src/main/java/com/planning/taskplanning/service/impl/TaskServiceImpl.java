@@ -4,6 +4,7 @@ import com.planning.taskplanning.model.Story;
 import com.planning.taskplanning.model.Task;
 import com.planning.taskplanning.model.dto.TaskDTO;
 import com.planning.taskplanning.repository.TaskRepository;
+import com.planning.taskplanning.service.StoryService;
 import com.planning.taskplanning.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +22,12 @@ public class TaskServiceImpl implements TaskService {
 
     private final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
 
-    private final TaskRepository taskRepository;
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
-    private StoryServiceImpl storyService;
+    private StoryService storyService;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
 
     @Override
     public Task save(Task task) {

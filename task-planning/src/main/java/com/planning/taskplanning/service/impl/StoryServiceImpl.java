@@ -21,27 +21,14 @@ public class StoryServiceImpl implements StoryService {
 
     private final Logger log = LoggerFactory.getLogger(StoryServiceImpl.class);
 
-    private final StoryRepository storyRepository;
-
+    @Autowired
+    private StoryRepository storyRepository;
     @Autowired
     private TaskService taskService;
-
     @Autowired
     private UserService userService;
 
-    /**
-     * Constructor
-     * @param storyRepository
-     */
-    public StoryServiceImpl(StoryRepository storyRepository) {
-        this.storyRepository = storyRepository;
-    }
 
-    /**
-     * save the story
-     * @param story the entity to save.
-     * @return
-     */
     @Override
     public Story save(Story story) {
         log.debug("Request to save Story : {}", story);
