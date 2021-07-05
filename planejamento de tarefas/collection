@@ -1,0 +1,299 @@
+{
+	"info": {
+		"_postman_id": "9eef22f5-a899-439c-b588-7193be1dc089",
+		"name": "TesteProjetos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"issueType\": \"Sub-task\",\n    \"description\": \"dev\",\n    \"summary\": \"dev\",\n    \"hours\": 5,\n    \"issueId\": 0,\n    \"epicLink\": \"www.com.br\",\n    \"complexityPoints\": \"20\",\n    \"priority\": \"ALTA\",\n    \"components\": \"varios\",\n    \"fixVersions\": \"1\",\n    \"labels\": \"teste_teste\",\n    \"dueDate\": \"12/12/12\",\n    \"team\": \"\",\n    \"originalEstimate\": 0,\n    \"story\": {\n        \"id\": 2\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/task/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAll",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-itau-apikey",
+								"value": "3f1d102a-8724-4b9e-afc4-2a53134b564c",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/task?exportJiraImporter=true",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task"
+							],
+							"query": [
+								{
+									"key": "nomeTime",
+									"value": "Contratação 2",
+									"disabled": true
+								},
+								{
+									"key": "exportJiraImporter",
+									"value": "true"
+								},
+								{
+									"key": "exportPlanningPoker",
+									"value": "true",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOne",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/task/e61b4639-926b-4bd6-ad1a-2e2256982a9f",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task",
+								"e61b4639-926b-4bd6-ad1a-2e2256982a9f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"issueType\": \"Sub-task\",\n    \"description\": \"task\",\n    \"summary\": \"task\",\n    \"hours\": 5,\n    \"issueId\":0,\n    \"story\":{\n        \"id\": 1\n    },\n    \"epicLink\":\"www.com.br\",\n    \"complexityPoints\":\"20\",\n    \"priority\":\"ALTA\",\n    \"components\":\"varios\",\n    \"fixVersions\":\"1\",\n    \"labels\":\"teste_teste\",\n    \"dueDate\":\"12/12/12\",\n    \"team\":\"\",\n    \"originalEstimate\":0\n}"
+						},
+						"url": {
+							"raw": "localhost:8080/task",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"id\": \"904d001d-5a95-4f97-a244-a2587f7e7ae9\",\n        \"issueType\": \"dev\",\n        \"description\": \"dev\",\n        \"summary\": \"dev\",\n        \"hours\": 2,\n        \"issueId\": 0,\n        \"jiraKey\": \"CSEG-1244\",\n        \"epicLink\": \"\",\n        \"complexityPoints\": \"\",\n        \"priority\": \"\",\n        \"components\": \"\",\n        \"fixVersions\": \"\",\n        \"labels\": \"\",\n        \"dueDate\": \"\",\n        \"team\": \"\",\n        \"originalEstimate\": 0\n    }"
+						},
+						"url": {
+							"raw": "localhost:8080/task/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"task",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Story",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/story",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"story"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOne",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/story/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"story",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"storyNumber\": \"CSGERSA-1234\",\n    \"title\": \"dev\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/story",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"story"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/story/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"story",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"storyNumber\": \"CSGERSA-1234\",\n    \"title\": \"DEV\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/story/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"story",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
